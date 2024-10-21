@@ -24,11 +24,11 @@ public class User : BaseEntity
     public int Elo { get; private set; } = 0;
 
     public User(
-        string nickName,
-        string email,
+        string? nickName,
+        string? email,
         UserRolesEnum userRole,
         Plan? plan,
-        string profileRank,
+        string? profileRank,
         int elo
         )
     {
@@ -36,11 +36,11 @@ public class User : BaseEntity
     }
 
     public void Update(
-        string nickName,
-        string email,
+        string? nickName,
+        string? email,
         UserRolesEnum userRole,
         Plan? plan,
-        string profileRank,
+        string? profileRank,
         int elo)
     {
         SetNickName(nickName);
@@ -51,17 +51,19 @@ public class User : BaseEntity
         SetElo(elo);
     }
 
-    public void SetNickName(string nickName)
+    public void SetNickName(string? nickName)
         => NickName = !string.IsNullOrEmpty(nickName)
         ? nickName : throw new ArgumentNullException(nameof(nickName));
 
-    public void SetEmail(string email) => Email = email;
+    public void SetEmail(string? email) 
+        => Email = !string.IsNullOrEmpty(email)
+        ? email : throw new ArgumentNullException(nameof(email));
 
     public void SetUserRole(UserRolesEnum role) => Role = role;
 
     public void SetPlan(Plan? plan) => Plan = plan;
 
-    public void SetProfileRank(string rank) => ProfileRank = rank;
+    public void SetProfileRank(string? rank) => ProfileRank = rank;
 
     public int SetElo(int elo)
         => Elo = elo >= 0
