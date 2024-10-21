@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LgymApp.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -18,8 +18,8 @@ namespace LgymApp.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet(Name = "GetSome")]
+        public IEnumerable<WeatherForecast> Get(string id)
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -28,6 +28,12 @@ namespace LgymApp.Api.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpPost]
+        public int Create(WeatherForecast weatherForecast)
+        {
+            return 1;
         }
     }
 }
