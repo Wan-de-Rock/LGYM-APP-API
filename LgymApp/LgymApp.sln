@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35323.107
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LgymApp.Api", "LgymApp.Api\LgymApp.Api.csproj", "{95930851-B9B5-42CF-8B95-B7366508D0E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LgymApp.Domain", "LgymApp.Domain\LgymApp.Domain.csproj", "{8C7D7336-BA35-42C9-AB54-F2F3F6712088}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{95930851-B9B5-42CF-8B95-B7366508D0E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95930851-B9B5-42CF-8B95-B7366508D0E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95930851-B9B5-42CF-8B95-B7366508D0E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C7D7336-BA35-42C9-AB54-F2F3F6712088}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C7D7336-BA35-42C9-AB54-F2F3F6712088}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C7D7336-BA35-42C9-AB54-F2F3F6712088}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C7D7336-BA35-42C9-AB54-F2F3F6712088}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

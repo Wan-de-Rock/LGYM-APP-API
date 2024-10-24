@@ -5,17 +5,34 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
+/// <summary>
+/// Represents an exercise entity.
+/// </summary>
 public class Exercise : BaseEntity
 {
+    /// <summary>
+    /// Name of the exercise.
+    /// </summary>
     [Required]
     public string Name { get; private set; }
 
+    /// <summary>
+    /// Body part targeted by the exercise.
+    /// </summary>
     [EnumDataType(typeof(BodyPartsEnum))]
     public BodyPartsEnum BodyPart { get; private set; }
 
-    [ForeignKey(nameof(LgymApp.Domain.Entities.User))]
+    /// <summary>
+    /// The user who added the exercise. If the user field is missing, 
+    /// it means that this is a global exercise visible to all users 
+    /// if not, this is a private exercise for the user who added It
+    /// </summary>
+    [ForeignKey(nameof(Entities.User))]
     public User? User { get; private set; }
 
+    /// <summary>
+    /// Description of the exercise.
+    /// </summary>
     public string? Description { get; private set; }
 
     //public string? ImageUrl { get; set; }

@@ -5,26 +5,50 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
+/// <summary>
+/// Represents an exercise score entity.
+/// </summary>
 public class ExerciseScore : BaseEntity
 {
-    [Required, ForeignKey(nameof(LgymApp.Domain.Entities.Exercise))]
+    /// <summary>
+    /// Exercise associated with the score.
+    /// </summary>
+    [Required, ForeignKey(nameof(Entities.Exercise))]
     public Exercise Exercise { get; private set; }
 
+    /// <summary>
+    /// User associated with the score.
+    /// </summary>
     [Required, ForeignKey(nameof(Entities.User))]
     public User User { get; private set; }
 
+    /// <summary>
+    /// Training associated with the score.
+    /// </summary>
     [Required, ForeignKey(nameof(Entities.Training))]
     public Training Training { get; private set; }
 
+    /// <summary>
+    /// Number of repeats in current series.
+    /// </summary>
     [Required]
     public int Repeats { get; private set; }
 
+    /// <summary>
+    /// Series number.
+    /// </summary>
     [Required]
     public int Series { get; private set; }
 
+    /// <summary>
+    /// Weight for the exercise score.
+    /// </summary>
     [Required]
     public double Weight { get; private set; }
 
+    /// <summary>
+    /// Weight unit for the exercise score.
+    /// </summary>
     [Required]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
