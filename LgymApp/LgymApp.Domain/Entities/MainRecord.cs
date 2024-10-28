@@ -5,23 +5,49 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
+/// <summary>
+/// The best result of the exercise.
+/// </summary>
 public class MainRecord : BaseEntity
 {
+    /// <summary>
+    /// User associated with the main record.
+    /// </summary>
     [Required, ForeignKey(nameof(Entities.User))]
     public User User { get; private set; }
 
+    /// <summary>
+    /// Exercise associated with the main record.
+    /// </summary>
     [Required, ForeignKey(nameof(Entities.Exercise))]
     public Exercise Exercise { get; private set; }
 
+    /// <summary>
+    /// Weight unit of the main record.
+    /// </summary>
     [Required]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
+    /// <summary>
+    /// Weight of the main record.
+    /// </summary>
     [Required]
     public double Weight { get; private set; }
 
+    /// <summary>
+    /// Date of the main record.
+    /// </summary>
     [Required]
     public DateTime Date { get; private set; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainRecord"/> class.
+    /// </summary>
+    /// <param name="user">The user associated with the main record.</param>
+    /// <param name="exercise">The exercise associated with the main record.</param>
+    /// <param name="weightUnit">The weight unit of the main record.</param>
+    /// <param name="weight">The weight of the main record.</param>
+    /// <param name="date">The date of the main record.</param>
     public MainRecord(User? user, Exercise? exercise, WeightDataUnitsEnum weightUnit, double weight, DateTime date)
     {
         SetUser(user);

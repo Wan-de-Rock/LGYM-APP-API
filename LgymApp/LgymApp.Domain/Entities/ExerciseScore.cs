@@ -25,14 +25,14 @@ public class ExerciseScore : BaseEntity
     /// <summary>
     /// Training associated with the score.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.Training))]
-    public Training Training { get; private set; }
+    [Required, ForeignKey(nameof(Entities.TrainingResult))]
+    public TrainingResult Training { get; private set; }
 
     /// <summary>
     /// Number of repeats in current series.
     /// </summary>
     [Required]
-    public int Repeats { get; private set; }
+    public int Repeats { get; private set; } // TODO mogą być powótrzenia połówkowe ???
 
     /// <summary>
     /// Series number.
@@ -52,7 +52,7 @@ public class ExerciseScore : BaseEntity
     [Required]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
-    public ExerciseScore(Exercise? exercise, User? user, Training? training, int repeats, int series, double weight, WeightDataUnitsEnum weightUnit)
+    public ExerciseScore(Exercise? exercise, User? user, TrainingResult? training, int repeats, int series, double weight, WeightDataUnitsEnum weightUnit)
     {
         SetExercise(exercise);
         SetUser(user);
@@ -75,7 +75,7 @@ public class ExerciseScore : BaseEntity
     public void SetUser(User? user) 
         => User = user ?? throw new ArgumentNullException(nameof(user));
 
-    public void SetTraining(Training? training) 
+    public void SetTraining(TrainingResult? training) 
         => Training = training ?? throw new ArgumentNullException(nameof(training));
 
     public void SetRepeats(int repeats) 
@@ -84,6 +84,7 @@ public class ExerciseScore : BaseEntity
     public void SetSeries(int series)
         => Series = series > 0 ? series : throw new ArgumentOutOfRangeException(nameof(series));
 
+    // TODO Do przegadania, bo co np z ćwiczeniami jak podciaganie ktore dotychczas dawalismy -35kg np, ale moze warto sie pozbyc tego minusa
     public void SetWeight(double weight)
         => Weight = weight >= 0 ? weight : throw new ArgumentOutOfRangeException(nameof(weight));
 
