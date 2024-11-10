@@ -1,38 +1,37 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Represents an exercise score entity.
 /// </summary>
-public class ExerciseScore : BaseEntity
+public class ExerciseScore : AuditableEntity
 {
     /// <summary>
     /// Exercise associated with the score.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.Exercise))]
+    [Required]
     public Exercise Exercise { get; private set; }
 
     /// <summary>
     /// User associated with the score.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.User))]
+    [Required]
     public User User { get; private set; }
 
     /// <summary>
     /// Training associated with the score.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.TrainingResult))]
+    [Required]
     public TrainingResult Training { get; private set; }
 
     /// <summary>
     /// Number of repeats in current series.
     /// </summary>
-    [Required]
-    public int Repeats { get; private set; } // TODO mogą być powótrzenia połówkowe ???
+    [Required] // TODO change to int and implement enum for partial repeats
+    public double Repeats { get; private set; }
 
     /// <summary>
     /// Series number.
@@ -49,10 +48,10 @@ public class ExerciseScore : BaseEntity
     /// <summary>
     /// Weight unit for the exercise score.
     /// </summary>
-    [Required]
+    [Required, EnumDataType(typeof(WeightDataUnitsEnum))]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
-    public ExerciseScore(Exercise? exercise, User? user, TrainingResult? training, int repeats, int series, double weight, WeightDataUnitsEnum weightUnit)
+    public ExerciseScore(Exercise? exercise, User? user, TrainingResult? training, double repeats, int series, double weight, WeightDataUnitsEnum weightUnit)
     {
         SetExercise(exercise);
         SetUser(user);
@@ -61,7 +60,7 @@ public class ExerciseScore : BaseEntity
         Update(repeats, series, weight, weightUnit);
     }
 
-    public void Update(int repeats, int series, double weight, WeightDataUnitsEnum weightUnit)
+    public void Update(double repeats, int series, double weight, WeightDataUnitsEnum weightUnit)
     {
         SetRepeats(repeats);
         SetSeries(series);
@@ -78,7 +77,7 @@ public class ExerciseScore : BaseEntity
     public void SetTraining(TrainingResult? training) 
         => Training = training ?? throw new ArgumentNullException(nameof(training));
 
-    public void SetRepeats(int repeats) 
+    public void SetRepeats(double repeats) 
         => Repeats = repeats >= 0 ? repeats : throw new ArgumentOutOfRangeException(nameof(repeats));
 
     public void SetSeries(int series)

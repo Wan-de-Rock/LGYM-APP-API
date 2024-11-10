@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
-public class RecommendedNumberOfReps : BaseEntity
+public class RecommendedNumberOfReps : AuditableEntity
 {
     [Required]
     public int Series { get; private set; }
@@ -12,7 +12,7 @@ public class RecommendedNumberOfReps : BaseEntity
     [Required]
     public string Repeats { get; private set; } // TODO: change to min, max integers
 
-    [Required, ForeignKey(nameof(Entities.Exercise))]
+    [Required]
     public Exercise Exercise { get; private set; }
 
     public RecommendedNumberOfReps(int series, string repeats, Exercise? exercise)

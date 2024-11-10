@@ -1,13 +1,12 @@
 ﻿using LgymApp.Domain.Common;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Container for the training plan days.
 /// </summary>
-public class Plan : BaseEntity
+public class Plan : AuditableEntity
 {
     /// <summary>
     /// The name of the plan.
@@ -18,7 +17,7 @@ public class Plan : BaseEntity
     /// <summary>
     /// The user associated with the plan.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.User))]
+    [Required]
     public User User { get; private set; }
 
     /// <summary>

@@ -2,7 +2,7 @@
 
 namespace LgymApp.Domain.Helpers;
 
-public static class EloHelpers
+public static class EloHelper
 {
     public static Dictionary<RanksEnum, (int min, int max)> EloRanks = new()
     {

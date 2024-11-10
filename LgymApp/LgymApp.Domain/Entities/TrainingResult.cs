@@ -1,24 +1,23 @@
 ﻿using LgymApp.Domain.Common;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Represents a training result entity.
 /// </summary>
-public class TrainingResult : BaseEntity
+public class TrainingResult : AuditableEntity
 {
     /// <summary>
     /// The user associated with the training result.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.User))]
+    [Required]
     public User User { get; private set; }
 
     /// <summary>
     /// The training plan associated with the training result.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.TrainingPlan))]
+    [Required]
     public TrainingPlan TrainingPlan { get; private set; }
 
     /// <summary>

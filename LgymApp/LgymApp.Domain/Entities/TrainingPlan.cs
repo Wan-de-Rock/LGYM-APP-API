@@ -7,7 +7,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a plan for a training day entity
 /// </summary>
-public class TrainingPlan : BaseEntity
+public class TrainingPlan : AuditableEntity
 {
     /// <summary>
     /// The name of the plan day.
@@ -18,7 +18,7 @@ public class TrainingPlan : BaseEntity
     /// <summary>
     /// The plan associated with the plan day.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.Plan))]
+    [Required]
     public Plan Plan { get; private set; }
 
     /// <summary>

@@ -1,31 +1,30 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// The best result of the exercise.
 /// </summary>
-public class MainRecord : BaseEntity
+public class MainRecord : AuditableEntity
 {
     /// <summary>
     /// User associated with the main record.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.User))]
+    [Required]
     public User User { get; private set; }
 
     /// <summary>
     /// Exercise associated with the main record.
     /// </summary>
-    [Required, ForeignKey(nameof(Entities.Exercise))]
+    [Required]
     public Exercise Exercise { get; private set; }
 
     /// <summary>
     /// Weight unit of the main record.
     /// </summary>
-    [Required]
+    [Required, EnumDataType(typeof(WeightDataUnitsEnum))]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
     /// <summary>

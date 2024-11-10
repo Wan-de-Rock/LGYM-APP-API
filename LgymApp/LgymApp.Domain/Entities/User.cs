@@ -38,12 +38,12 @@ public class User : BaseEntity
     /// <summary>
     /// The rank of the user based on their Elo score.
     /// </summary>
-    public RanksEnum Rank => EloHelpers.GetRank(Elo);
+    public RanksEnum Rank => EloHelper.GetRank(Elo);
 
     /// <summary>
     /// The Elo score of the user.
     /// </summary>
-    public int Elo { get; private set; } = EloHelpers.EloRanks[RanksEnum.Junior_1].max; // TODO: Elo must be calculated based on the user's performance
+    public int Elo { get; private set; } = EloHelper.EloRanks[RanksEnum.Junior_1].max; // TODO: Elo must be calculated based on the user's performance
 
     /// <summary>
     /// Initializes a new instance of the <see cref="User"/> class with the specified details.

@@ -1,14 +1,13 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Represents an exercise entity.
 /// </summary>
-public class Exercise : BaseEntity
+public class Exercise : AuditableEntity
 {
     /// <summary>
     /// Name of the exercise.
@@ -27,7 +26,6 @@ public class Exercise : BaseEntity
     /// it means that this is a global exercise visible to all users 
     /// if not, this is a private exercise for the user who added It
     /// </summary>
-    [ForeignKey(nameof(Entities.User))]
     public User? User { get; private set; }
 
     /// <summary>

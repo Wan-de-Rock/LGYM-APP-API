@@ -8,12 +8,12 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Measurement of body part
 /// </summary>
-public class BodyPartMeasurement : BaseEntity
+public class BodyPartMeasurement : AuditableEntity
 {
     /// <summary>
     /// The user associated with the body part measurement.
     /// </summary>
-    [Required, ForeignKey(nameof(LgymApp.Domain.Entities.User))]
+    [Required]
     public User User { get; private set; }
 
     /// <summary>
