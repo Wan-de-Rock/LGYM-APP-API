@@ -17,7 +17,6 @@ public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> w
             v => v,
             v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
         ).IsRequired();
-
         builder.Property(e => e.UpdatedAt).HasConversion(
             v => v,
             v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
