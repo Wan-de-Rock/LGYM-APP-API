@@ -1,5 +1,4 @@
-﻿using LgymApp.Domain.Helpers;
-using LgymApp.Domain.Interfaces;
+﻿using LgymApp.Domain.Converters;
 using Microsoft.EntityFrameworkCore;
 
 namespace LgymApp.DataAccess;
@@ -13,13 +12,16 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        //var entityTypes = ReflectionHelper.GetTypesAssignableFromType<IEntity>()
-        //    .Where(type => type.IsClass && !type.IsAbstract);
-
-        //foreach (var entityType in entityTypes)
-        //    modelBuilder.Entity(entityType);
-
-
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        var dateTimeConverter = new UtcDateTimeTruncateConverter();
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var dateTimeProperties = entityType.GetProperties().Where(p => p.ClrType == typeof(DateTime));
+            foreach (var property in dateTimeProperties)
+            {
+                property.SetValueConverter(dateTimeConverter);
+            }
+        }
     }
 }
