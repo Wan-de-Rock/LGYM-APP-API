@@ -1,4 +1,4 @@
-using LgymApp.Api.Data;
+using LgymApp.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

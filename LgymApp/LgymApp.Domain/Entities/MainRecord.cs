@@ -39,6 +39,8 @@ public class MainRecord : AuditableEntity
     [Required]
     public DateTime Date { get; private set; }
 
+    private MainRecord() { }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="MainRecord"/> class.
     /// </summary>

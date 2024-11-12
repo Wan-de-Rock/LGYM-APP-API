@@ -1,6 +1,5 @@
 ﻿using LgymApp.Domain.Common;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LgymApp.Domain.Entities;
 
@@ -12,7 +11,7 @@ public class TrainingPlan : AuditableEntity
     /// <summary>
     /// The name of the plan day.
     /// </summary>
-    [Required]
+    [Required, StringLength(50)]
     public string Name { get; private set; }
 
     /// <summary>
@@ -27,6 +26,8 @@ public class TrainingPlan : AuditableEntity
     [Required]
     public ISet<RecommendedNumberOfReps> RecommendedNumberOfReps { get; private set; }
         = new HashSet<RecommendedNumberOfReps>();
+
+    private TrainingPlan() { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TrainingPlan"/> class.

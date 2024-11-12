@@ -12,7 +12,7 @@ public class Exercise : AuditableEntity
     /// <summary>
     /// Name of the exercise.
     /// </summary>
-    [Required]
+    [Required, StringLength(50)]
     public string Name { get; private set; }
 
     /// <summary>
@@ -31,6 +31,7 @@ public class Exercise : AuditableEntity
     /// <summary>
     /// Description of the exercise.
     /// </summary>
+    [StringLength(1000)]
     public string? Description { get; private set; }
 
     //public string? ImageUrl { get; set; }
@@ -38,6 +39,8 @@ public class Exercise : AuditableEntity
     //public string? Equipment { get; set; }
     //public string? Difficulty { get; set; }
     //public string? ExerciseType { get; set; }
+
+    private Exercise() { }
 
     public Exercise(string name, BodyPartsEnum bodyPart, string description) => Update(name, bodyPart, description);
 

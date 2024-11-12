@@ -11,7 +11,7 @@ public class Plan : AuditableEntity
     /// <summary>
     /// The name of the plan.
     /// </summary>
-    [Required]
+    [Required, StringLength(50)]
     public string Name { get; private set; }
 
     /// <summary>
@@ -30,6 +30,8 @@ public class Plan : AuditableEntity
     /// </summary>
     [Required]
     public int NumberOfTrainingDays { get; private set; } // TODO: remove
+
+    private Plan() { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Plan"/> class.

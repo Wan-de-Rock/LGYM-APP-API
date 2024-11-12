@@ -25,6 +25,8 @@ public class TrainingResult : AuditableEntity
     /// </summary>
     public ISet<ExerciseScore> ExercisesScores { get; private set; } = new HashSet<ExerciseScore>();
 
+    private TrainingResult() { }
+
     public TrainingResult(User? user, TrainingPlan? trainingPlan)
     {
         SetUser(user);

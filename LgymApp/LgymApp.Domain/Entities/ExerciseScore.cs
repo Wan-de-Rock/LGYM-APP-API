@@ -51,6 +51,8 @@ public class ExerciseScore : AuditableEntity
     [Required, EnumDataType(typeof(WeightDataUnitsEnum))]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
+    private ExerciseScore() { }
+
     public ExerciseScore(Exercise? exercise, User? user, TrainingResult? training, double repeats, int series, double weight, WeightDataUnitsEnum weightUnit)
     {
         SetExercise(exercise);

@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LgymApp.Domain\LgymApp.Domain.csproj" />
+    <ProjectReference Include="..\LgymApp.DataAccess\LgymApp.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,13 +13,13 @@ public class User : BaseEntity
     /// <summary>
     /// The nickname of the user.
     /// </summary>
-    [Required]
+    [Required, StringLength(50)]
     public string NickName { get; private set; }
 
     /// <summary>
     /// The email address of the user.
     /// </summary>
-    [EmailAddress, Required]
+    [Required, EmailAddress, StringLength(100)]
     public string Email { get; private set; } // TODO: validate
     //public string HashedPassword { get; set; }
     //public string ProfilePicture { get; set; } 
@@ -31,11 +31,6 @@ public class User : BaseEntity
     public UserRolesEnum Role { get; private set; } = UserRolesEnum.Normal;
 
     /// <summary>
-    /// The plan associated with the user.
-    /// </summary>
-    public Plan? Plan { get; private set; }
-
-    /// <summary>
     /// The rank of the user based on their Elo score.
     /// </summary>
     public RanksEnum Rank => EloHelper.GetRank(Elo);
@@ -44,6 +39,8 @@ public class User : BaseEntity
     /// The Elo score of the user.
     /// </summary>
     public int Elo { get; private set; } = EloHelper.EloRanks[RanksEnum.Junior_1].max; // TODO: Elo must be calculated based on the user's performance
+
+    private User() { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="User"/> class with the specified details.
@@ -57,11 +54,10 @@ public class User : BaseEntity
         string? nickName,
         string? email,
         UserRolesEnum userRole,
-        Plan? plan,
         int elo
         )
     {
-        Update(nickName, email, userRole, plan, elo);
+        Update(nickName, email, userRole, elo);
     }
 
     /// <summary>
@@ -76,13 +72,11 @@ public class User : BaseEntity
         string? nickName,
         string? email,
         UserRolesEnum userRole,
-        Plan? plan,
         int elo)
     {
         SetNickName(nickName);
         SetEmail(email);
         SetUserRole(userRole);
-        SetPlan(plan);
         SetElo(elo);
     }
 
@@ -109,12 +103,6 @@ public class User : BaseEntity
     /// </summary>
     /// <param name="role">The role of the user.</param>
     public void SetUserRole(UserRolesEnum role) => Role = role;
-
-    /// <summary>
-    /// Sets the plan associated with the user.
-    /// </summary>
-    /// <param name="plan">The plan associated with the user.</param>
-    public void SetPlan(Plan? plan) => Plan = plan;
 
     /// <summary>
     /// Sets the Elo score of the user.

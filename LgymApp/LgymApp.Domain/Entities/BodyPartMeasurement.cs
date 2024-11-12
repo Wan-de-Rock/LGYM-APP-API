@@ -34,6 +34,8 @@ public class BodyPartMeasurement : AuditableEntity
     [Required]
     public double Weight { get; private set; }
 
+    private BodyPartMeasurement() { }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BodyPartMeasurement"/> class.
     /// </summary>
