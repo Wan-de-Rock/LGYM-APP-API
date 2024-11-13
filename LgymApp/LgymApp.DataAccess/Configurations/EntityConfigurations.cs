@@ -12,6 +12,15 @@ public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> w
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
         builder.HasKey(e => e.Id);
+
+        builder
+            .Property(e => e.Id)
+            .ValueGeneratedNever();
+
+        builder
+            .Property(e => e.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
     }
 }
 
@@ -20,6 +29,11 @@ public abstract class AuditableEntityConfiguration<T> : BaseEntityConfiguration<
     public override void Configure(EntityTypeBuilder<T> builder)
     {
         base.Configure(builder);
+
+        builder.Property(e => e.CreatedAt).IsRequired();
+        builder.Property(e => e.UpdatedAt).IsRequired();
+        builder.Property(e => e.CreatedBy).IsRequired();
+        builder.Property(e => e.UpdatedBy).IsRequired();
     }
 }
 
