@@ -12,16 +12,6 @@ public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> w
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
         builder.HasKey(e => e.Id);
-
-        builder.Property(e => e.CreatedAt).HasConversion(
-            v => v,
-            v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
-        ).IsRequired();
-
-        builder.Property(e => e.UpdatedAt).HasConversion(
-            v => v,
-            v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
-        ).IsRequired();
     }
 }
 
@@ -35,7 +25,7 @@ public abstract class AuditableEntityConfiguration<T> : BaseEntityConfiguration<
 
 #endregion
 
-public class UsersConfiguration : BaseEntityConfiguration<User>
+public class UsersConfiguration : AuditableEntityConfiguration<User>
 {
     public override void Configure(EntityTypeBuilder<User> builder)
     {

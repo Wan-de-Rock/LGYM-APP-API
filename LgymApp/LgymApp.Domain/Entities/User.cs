@@ -8,7 +8,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a user entity with properties and methods for managing user information.
 /// </summary>
-public class User : BaseEntity
+public class User : AuditableEntity
 {
     /// <summary>
     /// The nickname of the user.
