@@ -1,6 +1,7 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
 using LgymApp.Domain.Helpers;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace LgymApp.Domain.Entities;
@@ -8,6 +9,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a user entity with properties and methods for managing user information.
 /// </summary>
+//[EntityTypeConfiguration(typeof(UsersConfiguration))]
 public class User : AuditableEntity
 {
     /// <summary>

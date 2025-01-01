@@ -1,24 +1,46 @@
-﻿using LgymApp.Domain.Common;
-using LgymApp.Domain.Converters;
+﻿using LgymApp.DataAccess.Converters;
+using LgymApp.DataAccess.Interceptors;
+using LgymApp.Domain.Attributes;
 using Microsoft.EntityFrameworkCore;
 
 namespace LgymApp.DataAccess;
 
 public class ApplicationDbContext : DbContext
 {
+    private readonly AuditableObjectsSaveChangesInterceptor _auditingInterceptor = new();
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options) { }
+        : base(options)
+    {
+        //ChangeTracker.StateChanged += SetAuditableData;
+        //ChangeTracker.Tracked += SetAuditableData;
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder
+            .AddInterceptors(_auditingInterceptor)
+            ;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-        var dateTimeConverter = new UtcDateTimeTruncateConverter();
+        UtcDateTimeTruncateConverter dateTimeConverter = null;
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            var dateTimeProperties = entityType.GetProperties().Where(p => p.ClrType == typeof(DateTime));
+            var dateTimeProperties = entityType.GetProperties().Where(p => p.ClrType == typeof(DateTime)); //TODO handle nullable datetime
             foreach (var property in dateTimeProperties)
             {
+                if (property.GetValueConverter() is not null)
+                    continue;
+
+                var attribute = property.PropertyInfo?.GetCustomAttributes(typeof(DateTimeDefinitionAttribute), false).OfType<DateTimeDefinitionAttribute>().SingleOrDefault();
+
+                if (attribute is not null)
+                    dateTimeConverter = new(attribute.DateTimeComponent, attribute.Kind);
+                else
+                    dateTimeConverter = new();
+
                 property.SetValueConverter(dateTimeConverter);
             }
         }
@@ -26,41 +48,24 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 
-    public override int SaveChanges(bool acceptAllChangesOnSuccess = true)
-    {
-        ApplyAuditInformation();
-
-        return base.SaveChanges(acceptAllChangesOnSuccess);
-    }
-
-    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, CancellationToken cancellationToken = default)
-    {
-        ApplyAuditInformation();
-
-        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-    }
-
-    /// <summary>
-    /// Applies audit information to the entities being tracked by the context.
-    /// Sets the CreatedAt and CreatedBy properties for newly added entities.
-    /// Sets the UpdatedAt and UpdatedBy properties for newly added or modified entities.
-    /// </summary>
-    private void ApplyAuditInformation()
-    {
-        var entities = ChangeTracker.Entries().Where(e => e.State == EntityState.Added || e.State == EntityState.Modified).ToList();
-        entities.ForEach(e =>
-        {
-            if (e.Entity is AuditableEntity entity)
-            {
-                var now = DateTime.UtcNow;
-                if (e.State == EntityState.Added)
-                {
-                    e.Property(nameof(AuditableEntity.CreatedAt)).CurrentValue = now;
-                    e.Property(nameof(AuditableEntity.CreatedBy)).CurrentValue = Guid.NewGuid(); // TODO: set the current user ID
-                }
-                e.Property(nameof(AuditableEntity.UpdatedAt)).CurrentValue = now;
-                e.Property(nameof(AuditableEntity.UpdatedBy)).CurrentValue = Guid.NewGuid(); // TODO: set the current user ID
-            }
-        });
-    }
+    //[Obsolete]
+    //private static void SetAuditableData(object sender, EntityEntryEventArgs e)
+    //{
+    //    if (e.Entry.Entity is AuditableEntity auditableEntity)
+    //    {
+    //        switch (e.Entry.State)
+    //        {
+    //            case EntityState.Added:
+    //                auditableEntity.CreatedAt = DateTime.UtcNow.RemoveMilliSeconds();
+    //                auditableEntity.CreatedBy = Guid.NewGuid(); // TODO: set the current user ID
+    //                auditableEntity.UpdatedAt = DateTime.UtcNow.RemoveMilliSeconds();
+    //                auditableEntity.UpdatedBy = Guid.NewGuid(); // TODO: set the current user ID
+    //                break;
+    //            case EntityState.Modified:
+    //                auditableEntity.UpdatedAt = DateTime.UtcNow.RemoveMilliSeconds();
+    //                auditableEntity.UpdatedBy = Guid.NewGuid(); // TODO: set the current user ID
+    //                break;
+    //        }
+    //    }
+    //}
 }
