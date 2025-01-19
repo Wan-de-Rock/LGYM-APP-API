@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LgymApp.Application\LgymApp.Application.csproj" />
     <ProjectReference Include="..\LgymApp.DataAccess\LgymApp.DataAccess.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,6 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
 using LgymApp.Domain.Helpers;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace LgymApp.Domain.Entities;
@@ -9,7 +8,6 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a user entity with properties and methods for managing user information.
 /// </summary>
-//[EntityTypeConfiguration(typeof(UsersConfiguration))]
 public class User : AuditableEntity
 {
     /// <summary>
@@ -22,14 +20,19 @@ public class User : AuditableEntity
     /// The email address of the user.
     /// </summary>
     [Required, EmailAddress, StringLength(100)]
-    public string Email { get; private set; } // TODO: validate
-    //public string HashedPassword { get; set; }
+    public string Email { get; private set; } 
+    
+    /// <summary>
+    /// The hashed password of the user.
+    /// </summary>
+    [Required, StringLength(100)] // TODO: Set correct length
+    public string HashedPassword { get; private set; }
     //public string ProfilePicture { get; set; } 
 
     /// <summary>
     /// The role of the user.
     /// </summary>
-    [Required]
+    [Required, StringLength(100)]
     public UserRolesEnum Role { get; private set; } = UserRolesEnum.Normal;
 
     /// <summary>
@@ -42,24 +45,20 @@ public class User : AuditableEntity
     /// </summary>
     public int Elo { get; private set; } = EloHelper.EloRanks[RanksEnum.Junior_1].max; // TODO: Elo must be calculated based on the user's performance
 
-    private User() { }
-
     /// <summary>
     /// Initializes a new instance of the <see cref="User"/> class with the specified details.
     /// </summary>
     /// <param name="nickName">The nickname of the user.</param>
     /// <param name="email">The email address of the user.</param>
     /// <param name="userRole">The role of the user.</param>
-    /// <param name="plan">The plan associated with the user.</param>
     /// <param name="elo">The Elo score of the user.</param>
     public User(
         string? nickName,
         string? email,
-        UserRolesEnum userRole,
-        int elo
+        string hashedPassword
         )
     {
-        Update(nickName, email, userRole, elo);
+        Update(nickName, email, hashedPassword);
     }
 
     /// <summary>
@@ -68,18 +67,15 @@ public class User : AuditableEntity
     /// <param name="nickName">The nickname of the user.</param>
     /// <param name="email">The email address of the user.</param>
     /// <param name="userRole">The role of the user.</param>
-    /// <param name="plan">The plan associated with the user.</param>
     /// <param name="elo">The Elo score of the user.</param>
     public void Update(
         string? nickName,
         string? email,
-        UserRolesEnum userRole,
-        int elo)
+        string hashedPassword)
     {
         SetNickName(nickName);
         SetEmail(email);
-        SetUserRole(userRole);
-        SetElo(elo);
+        SetHashedPassword(hashedPassword);
     }
 
     /// <summary>
@@ -90,6 +86,15 @@ public class User : AuditableEntity
     public void SetNickName(string? nickName)
         => NickName = !string.IsNullOrEmpty(nickName)
         ? nickName : throw new ArgumentNullException(nameof(nickName));
+    
+    /// <summary>
+    /// Sets the hashed password of the user.
+    /// </summary>
+    /// <param name="hashedPassword">The hashed password of the user.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the hashed password is null or empty.</exception>
+    public void SetHashedPassword(string hashedPassword)
+        => HashedPassword = !string.IsNullOrEmpty(hashedPassword)
+            ? hashedPassword : throw new ArgumentNullException(nameof(hashedPassword));
 
     /// <summary>
     /// Sets the email address of the user.

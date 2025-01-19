@@ -27,21 +27,22 @@ public static class DateTimeHelpers
     #region Remove methods
 
     /// <summary>
-    /// Removes the specified component from the nullable DateTime.
+    /// Truncates the specified nullable DateTime to the given component.
     /// </summary>
-    /// <param name="dateTime">The nullable DateTime to modify.</param>
-    /// <param name="component">The component to remove.</param>
-    /// <returns>A nullable DateTime without the specified component.</returns>
-    public static DateTime? RemoveComponent(this DateTime? dateTime, DateTimeComponentsEnum component)
-        => dateTime.IsNullOrEmpty() ? dateTime : dateTime!.Value.RemoveComponent(component);
+    /// <param name="dateTime">The nullable DateTime to truncate.</param>
+    /// <param name="component">The component to truncate to.</param>
+    /// <returns>A truncated nullable DateTime.</returns>
+    public static DateTime? TruncateComponent(this DateTime? dateTime, DateTimeComponentsEnum component)
+        => dateTime.IsNullOrEmpty() ? dateTime : dateTime!.Value.TruncateComponent(component);
 
     /// <summary>
-    /// Removes the specified component from the DateTime.
+    /// Truncates the specified DateTime to the given component.
     /// </summary>
-    /// <param name="dateTime">The DateTime to modify.</param>
-    /// <param name="component">The component to remove.</param>
-    /// <returns>A DateTime without the specified component.</returns>
-    public static DateTime RemoveComponent(this DateTime dateTime, DateTimeComponentsEnum component)
+    /// <param name="dateTime">The DateTime to truncate.</param>
+    /// <param name="component">The component to truncate to.</param>
+    /// <returns>A truncated DateTime.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified component is not supported.</exception>
+    public static DateTime TruncateComponent(this DateTime dateTime, DateTimeComponentsEnum component)
     {
         return component switch
         {
