@@ -9,12 +9,19 @@ using Microsoft.Extensions.Options;
 
 namespace LgymApp.Api.Endpoints;
 
-public static class UserEndpoints
+public static class AuthEndpoints
 {
     public static IEndpointRouteBuilder MapUsersEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("register", Register);
-        app.MapPost("login", Login);
+        var group = app.MapGroup("user")
+            .WithOpenApi()
+            //.RequireAuthorization()
+            ;
+        
+        group.MapPost("register", Register);
+        group.MapPost("login", Login)
+            .WithSummary("Login user")
+            ;
 
         return app;
     }
