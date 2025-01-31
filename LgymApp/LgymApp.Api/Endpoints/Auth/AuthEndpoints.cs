@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using LgymApp.Application.Helpers;
 using LgymApp.Application.Options;
 using LgymApp.DataAccess;
@@ -7,13 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace LgymApp.Api.Endpoints;
+namespace LgymApp.Api.Endpoints.Auth;
+
+
 
 public static class AuthEndpoints
 {
     public static IEndpointRouteBuilder MapUsersEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("user")
+        var group = app.MapGroup("auth")
             .WithOpenApi()
             //.RequireAuthorization()
             ;
@@ -27,11 +28,11 @@ public static class AuthEndpoints
     }
     
     private static async Task<IResult> Register(
-        [FromBody] RegisterUserRequest request,
+        [FromBody] RegisterUserRequest registerUserRequest,
         IOptions<AuthOptions> authOptions
         )
     {
-        var user = new User(request.Nickname, request.Email, AuthHelper.HashPassword(request.Password));
+        var user = new User(registerUserRequest.Nickname, registerUserRequest.Email, AuthHelper.HashPassword(registerUserRequest.Password));
         
         var token = AuthHelper.GenerateJwtToken(user, authOptions.Value);
         return Results.Ok(token);
@@ -52,13 +53,3 @@ public static class AuthEndpoints
         return Results.Ok(token);
     }
 }
-
-public record RegisterUserRequest(
-    [Required] string Nickname,
-    [Required] string Email,
-    [Required] string Password
-    );
-public record LoginUserRequest(
-    [Required] string Email,
-    [Required] string Password
-    );

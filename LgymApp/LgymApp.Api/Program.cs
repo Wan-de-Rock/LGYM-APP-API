@@ -1,5 +1,6 @@
 using System.Text;
 using LgymApp.Api.Endpoints;
+using LgymApp.Api.Endpoints.Auth;
 using LgymApp.Api.Middlewares;
 using LgymApp.Application.Interfaces;
 using LgymApp.Application.Options;
