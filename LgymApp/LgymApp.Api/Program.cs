@@ -1,5 +1,6 @@
 using System.Text;
 using LgymApp.Api.Endpoints;
+using LgymApp.Api.Middlewares;
 using LgymApp.Application.Interfaces;
 using LgymApp.Application.Options;
 using LgymApp.Application.Services;
@@ -12,12 +13,12 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
+
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -26,7 +27,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
+
+//builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
 
 #region Auth
 
@@ -70,10 +72,13 @@ if (app.Environment.IsDevelopment())
         opt.SwaggerEndpoint("/swagger/v1/swagger.json", "LgymApp.Api v1");
     });
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalTransactionHandlerMiddleware>();
+//app.UseMiddleware<GlobalExceptionHandlerMiddleware>(); // TODO: can be customized
+app.UseExceptionHandler();
 
 app.Run();
