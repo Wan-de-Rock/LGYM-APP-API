@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace LgymApp.Api.Endpoints.Auth;
 
 public record RegisterUserRequest

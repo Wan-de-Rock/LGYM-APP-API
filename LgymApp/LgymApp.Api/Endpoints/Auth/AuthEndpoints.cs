@@ -1,14 +1,13 @@
+using LgymApp.Application.Dtos;
 using LgymApp.Application.Helpers;
+using LgymApp.Application.Interfaces;
 using LgymApp.Application.Options;
 using LgymApp.DataAccess;
-using LgymApp.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace LgymApp.Api.Endpoints.Auth;
-
-
 
 public static class AuthEndpoints
 {
@@ -16,7 +15,6 @@ public static class AuthEndpoints
     {
         var group = app.MapGroup("auth")
             .WithOpenApi()
-            //.RequireAuthorization()
             ;
         
         group.MapPost("register", Register);
@@ -29,10 +27,17 @@ public static class AuthEndpoints
     
     private static async Task<IResult> Register(
         [FromBody] RegisterUserRequest registerUserRequest,
+        IUserService userService,
         IOptions<AuthOptions> authOptions
         )
     {
-        var user = new User(registerUserRequest.Nickname, registerUserRequest.Email, AuthHelper.HashPassword(registerUserRequest.Password));
+        var userDto = new UserDto // TODO: Use mapper
+        {
+            Nickname = registerUserRequest.Nickname,
+            Email = registerUserRequest.Email,
+            Password = registerUserRequest.Password
+        };
+        var user = await userService.Create(userDto);
         
         var token = AuthHelper.GenerateJwtToken(user, authOptions.Value);
         return Results.Ok(token);
@@ -43,7 +48,7 @@ public static class AuthEndpoints
         IOptions<AuthOptions> authOptions,
         AppDbContext dbContext)
     {
-        var user = await dbContext.Set<User>().FirstOrDefaultAsync(x => x.Email == request.Email);
+        var user = await dbContext.Set<Domain.Entities.User>().FirstOrDefaultAsync(x => x.Email == request.Email);
         if (user == null || !AuthHelper.VerifyPasswordHash(request.Password, user.HashedPassword))
         {
             return Results.Unauthorized();
