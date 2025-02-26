@@ -8,8 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace LgymApp.Application.Helpers;
 
-public static class AuthHelper // TODO: Add salt to password hashing
+public static class AuthHelper 
 {
+    // TODO: Add salt to password hashing
     public static string HashPassword(string password)
     {
         using var hmac = new HMACSHA512();

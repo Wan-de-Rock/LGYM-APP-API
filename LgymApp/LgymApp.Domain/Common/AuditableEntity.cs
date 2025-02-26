@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace LgymApp.Domain.Common;
+﻿namespace LgymApp.Domain.Common;
 
 /// <summary>
 /// Represents an entity that includes audit information such as creation and modification user.

@@ -7,11 +7,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LgymApp.Application.Services;
 
-public class UserService(AppDbContext context) : IUserService
+public class UserService(AppDbContext context) : IScopedService
 {
     public async Task<User?> Get(Guid id)
     {
         return await context.Set<User>().FindAsync(id);
+    }
+    
+    public async Task<User?> GetByNicknameOrEmail(string nicknameOrEmail)
+    {
+        return await context.Set<User>()
+            .FirstOrDefaultAsync(x => x.Email == nicknameOrEmail 
+                                      || x.Nickname == nicknameOrEmail);
     }
 
     public async Task<User> Create(UserDto userDto)
@@ -23,13 +30,23 @@ public class UserService(AppDbContext context) : IUserService
         return user;
     }
 
-    public Task Update(UserDto userDto)
+    public async Task<User?> Update(UserDto userDto)
     {
-        throw new NotImplementedException();
+        var hashedPassword = AuthHelper.HashPassword(userDto.Password);
+        var user = await context.Set<User>().FindAsync(userDto.Id);
+        if (user is null) return null;
+        
+        user.Update(userDto.Nickname, userDto.Email, hashedPassword);
+        await context.SaveChangesAsync();
+        return user;
     }
 
-    public Task Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        await context.Set<User>().ExecuteDeleteAsync()
+        var user = await context.Set<User>().FindAsync(id);
+        if (user is null) return;
+        
+        context.Set<User>().Remove(user);
+        await context.SaveChangesAsync();
     }
 }

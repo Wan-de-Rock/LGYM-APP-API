@@ -1,13 +1,16 @@
 using System.Text;
-using LgymApp.Api.Endpoints;
 using LgymApp.Api.Endpoints.Auth;
+using LgymApp.Api.Extensions;
+using LgymApp.Api.Interfaces;
 using LgymApp.Api.Middlewares;
 using LgymApp.Application.Interfaces;
 using LgymApp.Application.Options;
 using LgymApp.Application.Services;
 using LgymApp.DataAccess;
+using LgymApp.DataAccess.Interceptors;
 using LgymApp.DataAccess.Interfaces;
 using LgymApp.DataAccess.Repositories;
+using LgymApp.Domain.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,15 +23,21 @@ builder.Services.AddProblemDetails();
 
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddSingleton<AuditableObjectsSaveChangesInterceptor>();
+
+builder.Services.AddDbContext<AppDbContext>((sp, options) =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options
+        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .AddInterceptors(
+            sp.GetRequiredService<AuditableObjectsSaveChangesInterceptor>()
+        );
 });
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-
 //builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
+
+builder.Services.AddServices();
+builder.Services.AddEndpoints();
 
 #region Auth
 
@@ -61,7 +70,8 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-app.MapUsersEndpoints(); // TODO: make dynamic
+var routeGroupBuilder = app.MapGroup("api");
+app.UseEndpoints(routeGroupBuilder);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -82,3 +92,4 @@ app.UseMiddleware<GlobalTransactionHandlerMiddleware>();
 app.UseExceptionHandler();
 
 app.Run();
+

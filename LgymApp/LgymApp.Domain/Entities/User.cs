@@ -14,7 +14,7 @@ public class User : AuditableEntity
     /// The nickname of the user.
     /// </summary>
     [Required, StringLength(50)]
-    public string NickName { get; private set; }
+    public string Nickname { get; private set; }
 
     /// <summary>
     /// The email address of the user.
@@ -84,7 +84,7 @@ public class User : AuditableEntity
     /// <param name="nickName">The nickname of the user.</param>
     /// <exception cref="ArgumentNullException">Thrown when the nickname is null or empty.</exception>
     public void SetNickName(string? nickName)
-        => NickName = !string.IsNullOrEmpty(nickName)
+        => Nickname = !string.IsNullOrEmpty(nickName)
         ? nickName : throw new ArgumentNullException(nameof(nickName));
     
     /// <summary>

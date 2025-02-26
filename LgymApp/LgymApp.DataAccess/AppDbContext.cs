@@ -7,18 +7,18 @@ namespace LgymApp.DataAccess;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    private readonly AuditableObjectsSaveChangesInterceptor _auditingInterceptor = new();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder
-            .AddInterceptors(_auditingInterceptor)
-            ;
+    // private readonly AuditableObjectsSaveChangesInterceptor _auditingInterceptor = new();
+    //
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //     => optionsBuilder
+    //         .AddInterceptors(_auditingInterceptor)
+    //         ;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-        NullableUtcDateTimeTruncateConverter? dateTimeConverter = null;
+        NullableUtcDateTimeTruncateConverter dateTimeConverter = null!;
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             var dateTimeProperties = entityType.GetProperties().Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?)); //TODO check nullable datetime
