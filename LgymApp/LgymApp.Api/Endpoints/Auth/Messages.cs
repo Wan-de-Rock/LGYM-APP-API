@@ -9,4 +9,8 @@ public record RegisterUserRequest
     public string Password { get; init; }
 }
 
-public record LoginUserRequest : RegisterUserRequest {}
+public record LoginUserRequest
+{
+    public string NicknameOrEmail { get; set; }
+    public string Password { get; set; }
+}
