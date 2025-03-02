@@ -1,5 +1,5 @@
-﻿using LgymApp.Domain.Common;
-using LgymApp.Domain.Helpers;
+﻿using LgymApp.Domain.Helpers;
+using LgymApp.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -12,7 +12,7 @@ public class AuditableObjectsSaveChangesInterceptor : SaveChangesInterceptor
         var context = eventData.Context;
         if (context == null) return base.SavingChanges(eventData, result);
 
-        SetAuditableData(context);
+        HandleSoftDeletes(context);
 
         return base.SavingChanges(eventData, result);
     }
@@ -22,29 +22,21 @@ public class AuditableObjectsSaveChangesInterceptor : SaveChangesInterceptor
         var context = eventData.Context;
         if (context == null) return base.SavingChangesAsync(eventData, result, cancellationToken);
 
-        SetAuditableData(context);
+        HandleSoftDeletes(context);
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
-
-    private void SetAuditableData(DbContext context)
+    
+    private void HandleSoftDeletes(DbContext context)
     {
-        //context.ChangeTracker.DetectChanges();
-
-        var entries = context.ChangeTracker.Entries<AuditableEntity>();
+        var entries = context.ChangeTracker.Entries<ISoftDeletable>();
 
         foreach (var entry in entries)
         {
-            if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+            if (entry.State == EntityState.Deleted)
             {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Property(e => e.CreatedAt).CurrentValue = DateTime.UtcNow.RemoveMilliSeconds();
-                    entry.Property(e => e.CreatedBy).CurrentValue = Guid.NewGuid(); // TODO: set the current user ID
-                }
-
-                entry.Property(e => e.UpdatedAt).CurrentValue = DateTime.UtcNow.RemoveMilliSeconds();
-                entry.Property(e => e.UpdatedBy).CurrentValue = Guid.NewGuid(); // TODO: set the current user ID
+                entry.State = EntityState.Modified;
+                entry.Property(nameof(ISoftDeletable.DeletedAt)).CurrentValue = DateTime.UtcNow.RemoveMilliSeconds();
             }
         }
     }
