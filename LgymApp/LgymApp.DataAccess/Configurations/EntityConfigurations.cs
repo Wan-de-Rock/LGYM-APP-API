@@ -1,5 +1,4 @@
-﻿using LgymApp.Domain.Common;
-using LgymApp.Domain.Entities;
+﻿using LgymApp.Domain.Entities;
 using LgymApp.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,7 +7,7 @@ namespace LgymApp.DataAccess.Configurations;
 
 #region base entity configuration
 
-public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> where T : BaseEntity
+public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> where T : class, IEntity
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
