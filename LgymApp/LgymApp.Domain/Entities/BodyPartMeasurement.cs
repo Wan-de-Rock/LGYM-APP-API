@@ -7,7 +7,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Measurement of body part
 /// </summary>
-public class BodyPartMeasurement : AuditableEntity
+public class BodyPartMeasurement : BaseEntity
 {
     /// <summary>
     /// The user associated with the body part measurement.

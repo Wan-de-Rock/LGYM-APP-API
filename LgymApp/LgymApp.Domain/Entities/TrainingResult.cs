@@ -6,7 +6,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a training result entity.
 /// </summary>
-public class TrainingResult : AuditableEntity
+public class TrainingResult : BaseEntity
 {
     /// <summary>
     /// The user associated with the training result.

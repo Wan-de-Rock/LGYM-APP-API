@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace LgymApp.DataAccess.Interceptors;
 
-public class AuditableObjectsSaveChangesInterceptor : SaveChangesInterceptor
+public class SoftDeletesInterceptor : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -36,7 +36,7 @@ public class AuditableObjectsSaveChangesInterceptor : SaveChangesInterceptor
             if (entry.State == EntityState.Deleted)
             {
                 entry.State = EntityState.Modified;
-                entry.Property(nameof(ISoftDeletable.DeletedAt)).CurrentValue = DateTime.UtcNow.RemoveMilliSeconds();
+                entry.Property(nameof(ISoftDeletable.DeletedAt)).CurrentValue = DateTime.UtcNow;
             }
         }
     }

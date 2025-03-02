@@ -14,10 +14,15 @@ public class UserService(AppDbContext context) : IScopedService
         return await context.Set<User>().FindAsync(id);
     }
     
+    public async Task<bool> Exists(string nickname, string email)
+    {
+        return await context.Set<User>().AnyAsync(x => x.Email == email || x.Nickname == nickname);
+    }
+    
     public async Task<User?> GetByNicknameOrEmail(string nicknameOrEmail)
     {
         return await context.Set<User>()
-            .FirstOrDefaultAsync(x => x.Email == nicknameOrEmail 
+            .SingleOrDefaultAsync(x => x.Email == nicknameOrEmail 
                                       || x.Nickname == nicknameOrEmail);
     }
 

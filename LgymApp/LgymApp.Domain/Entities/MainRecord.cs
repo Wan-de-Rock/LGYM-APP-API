@@ -7,7 +7,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// The best result of the exercise.
 /// </summary>
-public class MainRecord : AuditableEntity
+public class MainRecord : BaseEntity
 {
     /// <summary>
     /// User associated with the main record.

@@ -6,7 +6,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a plan for a training day entity
 /// </summary>
-public class TrainingPlan : AuditableEntity
+public class TrainingPlan : BaseEntity
 {
     /// <summary>
     /// The name of the plan day.

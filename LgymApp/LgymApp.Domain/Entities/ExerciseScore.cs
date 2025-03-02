@@ -7,7 +7,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents an exercise score entity.
 /// </summary>
-public class ExerciseScore : AuditableEntity
+public class ExerciseScore : BaseEntity
 {
     /// <summary>
     /// Exercise associated with the score.

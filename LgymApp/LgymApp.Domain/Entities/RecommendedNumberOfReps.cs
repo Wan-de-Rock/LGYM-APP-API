@@ -6,7 +6,7 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents the recommended number of repetitions for an exercise.
 /// </summary>
-public class RecommendedNumberOfReps : AuditableEntity
+public class RecommendedNumberOfReps : BaseEntity
 {
     /// <summary>
     /// Gets the number of series.

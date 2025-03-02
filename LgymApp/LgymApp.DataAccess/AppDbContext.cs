@@ -5,29 +5,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LgymApp.DataAccess;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options, SoftDeletesInterceptor softDeletesInterceptor) : DbContext(options)
 {
-    // private readonly AuditableObjectsSaveChangesInterceptor _auditingInterceptor = new();
-    //
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //     => optionsBuilder
-    //         .AddInterceptors(_auditingInterceptor)
-    //         ;
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder
+            .AddInterceptors(softDeletesInterceptor);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-
+        
+        AddDateTimeTruncateConverter(modelBuilder);
+    }
+    
+    private void AddDateTimeTruncateConverter(ModelBuilder modelBuilder)
+    {
         NullableUtcDateTimeTruncateConverter dateTimeConverter = null!;
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            var dateTimeProperties = entityType.GetProperties().Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?)); //TODO check nullable datetime
+            var dateTimeProperties = entityType.GetProperties()
+                .Where(p => p.ClrType == typeof(DateTime) ||
+                            p.ClrType == typeof(DateTime?)); //TODO check nullable datetime
             foreach (var property in dateTimeProperties)
             {
                 if (property.GetValueConverter() is not null)
                     continue;
 
-                var attribute = property.PropertyInfo?.GetCustomAttributes(typeof(DateTimeDefinitionAttribute), false).OfType<DateTimeDefinitionAttribute>().SingleOrDefault();
+                var attribute = property.PropertyInfo?.GetCustomAttributes(typeof(DateTimeDefinitionAttribute), false)
+                    .OfType<DateTimeDefinitionAttribute>().SingleOrDefault();
 
                 if (attribute is not null)
                     dateTimeConverter = new(attribute.DateTimeComponent, attribute.Kind);
@@ -37,7 +43,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 property.SetValueConverter(dateTimeConverter);
             }
         }
-
-        base.OnModelCreating(modelBuilder);
+    }
+    
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+        //configurationBuilder.Conventions.Add(new SnakeCaseConventionPlugin());
     }
 }

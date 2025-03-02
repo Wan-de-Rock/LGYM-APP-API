@@ -1,16 +1,9 @@
 using System.Text;
-using LgymApp.Api.Endpoints.Auth;
 using LgymApp.Api.Extensions;
-using LgymApp.Api.Interfaces;
 using LgymApp.Api.Middlewares;
-using LgymApp.Application.Interfaces;
 using LgymApp.Application.Options;
-using LgymApp.Application.Services;
 using LgymApp.DataAccess;
 using LgymApp.DataAccess.Interceptors;
-using LgymApp.DataAccess.Interfaces;
-using LgymApp.DataAccess.Repositories;
-using LgymApp.Domain.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,15 +16,12 @@ builder.Services.AddProblemDetails();
 
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
 
-builder.Services.AddSingleton<AuditableObjectsSaveChangesInterceptor>();
+builder.Services.AddSingleton<SoftDeletesInterceptor>();
 
-builder.Services.AddDbContext<AppDbContext>((sp, options) =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options
-        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-        .AddInterceptors(
-            sp.GetRequiredService<AuditableObjectsSaveChangesInterceptor>()
-        );
+        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 //builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();

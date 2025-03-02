@@ -1,7 +1,6 @@
 using LgymApp.Api.Interfaces;
 using LgymApp.Application.Dtos;
 using LgymApp.Application.Helpers;
-using LgymApp.Application.Interfaces;
 using LgymApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +13,8 @@ public sealed class UserEndpoints : IEndpointDefinition
         var group = builder.MapGroup("users")
                 .WithTags("Users")
                 .WithOpenApi()
-                .RequireAuthorization()
+                .AllowAnonymous()
+                //.RequireAuthorization()
             ;
 
         group.MapGet("{id}", Get);

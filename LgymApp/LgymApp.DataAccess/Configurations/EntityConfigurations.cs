@@ -1,5 +1,6 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Entities;
+using LgymApp.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,37 +18,43 @@ public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> w
             .Property(e => e.Id)
             .ValueGeneratedNever();
 
-        builder
-            .Property(e => e.IsDeleted)
-            .IsRequired()
-            .HasDefaultValue(false);
-    }
-}
+        if (typeof(ISoftDeletable).IsAssignableFrom(typeof(T)))
+        {
+            builder
+                .Property(e => ((ISoftDeletable)e).DeletedAt)
+                .HasDefaultValue(null);
 
-public abstract class AuditableEntityConfiguration<T> : BaseEntityConfiguration<T> where T : AuditableEntity
-{
-    public override void Configure(EntityTypeBuilder<T> builder)
-    {
-        base.Configure(builder);
-
-        builder.Property(e => e.CreatedAt).IsRequired();
-        builder.Property(e => e.UpdatedAt).IsRequired();
-        builder.Property(e => e.CreatedBy).IsRequired();
-        builder.Property(e => e.UpdatedBy).IsRequired();
+            builder.HasQueryFilter(e => !((ISoftDeletable)e).DeletedAt.HasValue);
+        }
     }
 }
 
 #endregion
 
-public class UsersConfiguration : AuditableEntityConfiguration<User>
+public class UsersConfiguration : BaseEntityConfiguration<User>
 {
     public override void Configure(EntityTypeBuilder<User> builder)
     {
         base.Configure(builder);
+        
+        builder
+            .Property(u => u.Nickname)
+            .IsRequired()
+            .HasMaxLength(50);
+        
+        builder
+            .Property(u => u.Email)
+            .IsRequired()
+            .HasMaxLength(100);
+        
+        builder
+            .Property(u => u.HashedPassword)
+            .IsRequired()
+            .HasMaxLength(64);
     }
 }
 
-public class ExercisesConfiguration : AuditableEntityConfiguration<Exercise>
+public class ExercisesConfiguration : BaseEntityConfiguration<Exercise>
 {
     public override void Configure(EntityTypeBuilder<Exercise> builder)
     {
@@ -57,7 +64,7 @@ public class ExercisesConfiguration : AuditableEntityConfiguration<Exercise>
     }
 }
 
-public class PlansConfiguration : AuditableEntityConfiguration<Plan>
+public class PlansConfiguration : BaseEntityConfiguration<Plan>
 {
     public override void Configure(EntityTypeBuilder<Plan> builder)
     {
@@ -72,7 +79,7 @@ public class PlansConfiguration : AuditableEntityConfiguration<Plan>
     }
 }
 
-public class BodyPartMeasurementsConfiguration : AuditableEntityConfiguration<BodyPartMeasurement>
+public class BodyPartMeasurementsConfiguration : BaseEntityConfiguration<BodyPartMeasurement>
 {
     public override void Configure(EntityTypeBuilder<BodyPartMeasurement> builder)
     {
@@ -82,7 +89,7 @@ public class BodyPartMeasurementsConfiguration : AuditableEntityConfiguration<Bo
     }
 }
 
-public class ExerciseScoresConfiguration : AuditableEntityConfiguration<ExerciseScore>
+public class ExerciseScoresConfiguration : BaseEntityConfiguration<ExerciseScore>
 {
     public override void Configure(EntityTypeBuilder<ExerciseScore> builder)
     {
@@ -94,7 +101,7 @@ public class ExerciseScoresConfiguration : AuditableEntityConfiguration<Exercise
     }
 }
 
-public class TrainingResultsConfiguration : AuditableEntityConfiguration<TrainingResult>
+public class TrainingResultsConfiguration : BaseEntityConfiguration<TrainingResult>
 {
     public override void Configure(EntityTypeBuilder<TrainingResult> builder)
     {
@@ -108,7 +115,7 @@ public class TrainingResultsConfiguration : AuditableEntityConfiguration<Trainin
     }
 }
 
-public class TrainingPlansConfiguration : AuditableEntityConfiguration<TrainingPlan>
+public class TrainingPlansConfiguration : BaseEntityConfiguration<TrainingPlan>
 {
     public override void Configure(EntityTypeBuilder<TrainingPlan> builder)
     {
@@ -122,7 +129,7 @@ public class TrainingPlansConfiguration : AuditableEntityConfiguration<TrainingP
     }
 }
 
-public class RecommendedNumberOfRepsConfiguration : AuditableEntityConfiguration<RecommendedNumberOfReps>
+public class RecommendedNumberOfRepsConfiguration : BaseEntityConfiguration<RecommendedNumberOfReps>
 {
     public override void Configure(EntityTypeBuilder<RecommendedNumberOfReps> builder)
     {
@@ -131,7 +138,7 @@ public class RecommendedNumberOfRepsConfiguration : AuditableEntityConfiguration
     }
 }
 
-public class MainRecordsConfiguration : AuditableEntityConfiguration<MainRecord>
+public class MainRecordsConfiguration : BaseEntityConfiguration<MainRecord>
 {
     public override void Configure(EntityTypeBuilder<MainRecord> builder)
     {

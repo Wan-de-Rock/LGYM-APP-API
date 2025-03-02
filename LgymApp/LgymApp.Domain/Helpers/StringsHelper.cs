@@ -29,13 +29,14 @@ public static class StringsHelper
 
         var builder = new StringBuilder(name.Length + Math.Min(2, name.Length / 5));
         var previousCategory = default(UnicodeCategory?);
-
+        const char underScore = '_';
+        
         for (var currentIndex = 0; currentIndex < name.Length; currentIndex++)
         {
             var currentChar = name[currentIndex];
-            if (currentChar == '_')
+            if (currentChar == underScore)
             {
-                builder.Append('_');
+                builder.Append(underScore);
                 previousCategory = null;
                 continue;
             }
@@ -53,7 +54,7 @@ public static class StringsHelper
                         currentIndex + 1 < name.Length &&
                         char.IsLower(name[currentIndex + 1]))
                     {
-                        builder.Append('_');
+                        builder.Append(underScore);
                     }
 
                     currentChar = char.ToLower(currentChar);
@@ -62,7 +63,7 @@ public static class StringsHelper
                 case UnicodeCategory.LowercaseLetter:
                 case UnicodeCategory.DecimalDigitNumber:
                     if (previousCategory == UnicodeCategory.SpaceSeparator)
-                        builder.Append('_');
+                        builder.Append(underScore);
                     break;
 
                 default:
@@ -73,6 +74,25 @@ public static class StringsHelper
 
             builder.Append(currentChar);
             previousCategory = currentCategory;
+        }
+
+        return builder.ToString();
+    }
+
+    public static string ToSnakeCase2(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return name;
+
+        var builder = new System.Text.StringBuilder();
+        for (int i = 0; i < name.Length; i++)
+        {
+            if (char.IsUpper(name[i]) && i > 0)
+            {
+                builder.Append('_');
+            }
+
+            builder.Append(char.ToLower(name[i]));
         }
 
         return builder.ToString();

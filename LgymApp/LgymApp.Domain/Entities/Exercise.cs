@@ -1,13 +1,14 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using LgymApp.Domain.Interfaces;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Represents an exercise entity.
 /// </summary>
-public class Exercise : AuditableEntity
+public class Exercise : BaseEntity, ISoftDeletable
 {
     /// <summary>
     /// Name of the exercise.
@@ -33,6 +34,8 @@ public class Exercise : AuditableEntity
     /// </summary>
     [StringLength(1000)]
     public string? Description { get; private set; }
+    
+    public DateTime? DeletedAt { get; private set; } 
 
     //public string? ImageUrl { get; set; }
     //public string? VideoUrl { get; set; }
