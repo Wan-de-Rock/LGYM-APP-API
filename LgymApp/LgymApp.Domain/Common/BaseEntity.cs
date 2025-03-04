@@ -1,16 +1,11 @@
 ﻿using LgymApp.Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace LgymApp.Domain.Common;
 
-/// <summary>
-/// Represents the base entity with common properties for all entities.
-/// </summary>
-[PrimaryKey(nameof(Id))]
-public abstract class BaseEntity : IEntity
+public abstract class BaseEntity<T> : IEntity where T : IEntity
 {
-    /// <summary>
-    /// Gets the unique identifier for the entity.
-    /// </summary>
     public Guid Id { get; } = Guid.NewGuid();
+
+    public static string TableName 
+        => throw new ArgumentNullException(nameof(TableName), $"{typeof(T).Name} must define a static TableName property.");
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LgymApp.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250228231423_Naming2")]
-    partial class Naming2
+    [Migration("20250302213839_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,243 +28,307 @@ namespace LgymApp.DataAccess.Migrations
             modelBuilder.Entity("LgymApp.Domain.Entities.BodyPartMeasurement", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<int>("BodyPart")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("body_part");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.Property<double>("Weight")
-                        .HasColumnType("double precision");
+                        .HasColumnType("double precision")
+                        .HasColumnName("weight");
 
                     b.Property<int>("WeightUnit")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("weight_unit");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_body_part_measurement");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_body_part_measurement_user_id");
 
-                    b.ToTable("BodyPartMeasurement");
+                    b.ToTable("body_part_measurement", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.Exercise", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<int>("BodyPart")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("body_part");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_exercise");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_exercise_user_id");
 
-                    b.ToTable("Exercise");
+                    b.ToTable("exercise", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.ExerciseScore", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("ExerciseId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("exercise_id");
 
                     b.Property<double>("Repeats")
-                        .HasColumnType("double precision");
+                        .HasColumnType("double precision")
+                        .HasColumnName("repeats");
 
                     b.Property<int>("Series")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("series");
 
                     b.Property<Guid>("TrainingId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("training_id");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.Property<double>("Weight")
-                        .HasColumnType("double precision");
+                        .HasColumnType("double precision")
+                        .HasColumnName("weight");
 
                     b.Property<int>("WeightUnit")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("weight_unit");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_exercise_score");
 
-                    b.HasIndex("ExerciseId");
+                    b.HasIndex("ExerciseId")
+                        .HasDatabaseName("ix_exercise_score_exercise_id");
 
-                    b.HasIndex("TrainingId");
+                    b.HasIndex("TrainingId")
+                        .HasDatabaseName("ix_exercise_score_training_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_exercise_score_user_id");
 
-                    b.ToTable("ExerciseScore");
+                    b.ToTable("exercise_score", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.MainRecord", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
 
                     b.Property<Guid>("ExerciseId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("exercise_id");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.Property<double>("Weight")
-                        .HasColumnType("double precision");
+                        .HasColumnType("double precision")
+                        .HasColumnName("weight");
 
                     b.Property<int>("WeightUnit")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("weight_unit");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_main_record");
 
-                    b.HasIndex("ExerciseId");
+                    b.HasIndex("ExerciseId")
+                        .HasDatabaseName("ix_main_record_exercise_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_main_record_user_id");
 
-                    b.ToTable("MainRecord");
+                    b.ToTable("main_record", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.Plan", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
 
                     b.Property<int>("NumberOfTrainingDays")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("number_of_training_days");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_plan");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_plan_user_id");
 
-                    b.ToTable("Plan");
+                    b.ToTable("plan", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.RecommendedNumberOfReps", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("ExerciseId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("exercise_id");
 
                     b.Property<string>("Repeats")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("repeats");
 
                     b.Property<int>("Series")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("series");
 
                     b.Property<Guid?>("TrainingPlanId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("training_plan_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_recommended_number_of_reps");
 
-                    b.HasIndex("ExerciseId");
+                    b.HasIndex("ExerciseId")
+                        .HasDatabaseName("ix_recommended_number_of_reps_exercise_id");
 
-                    b.HasIndex("TrainingPlanId");
+                    b.HasIndex("TrainingPlanId")
+                        .HasDatabaseName("ix_recommended_number_of_reps_training_plan_id");
 
-                    b.ToTable("RecommendedNumberOfReps");
+                    b.ToTable("recommended_number_of_reps", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.TrainingPlan", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
 
                     b.Property<Guid>("PlanId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("plan_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_training_plan");
 
-                    b.HasIndex("PlanId");
+                    b.HasIndex("PlanId")
+                        .HasDatabaseName("ix_training_plan_plan_id");
 
-                    b.ToTable("TrainingPlan");
+                    b.ToTable("training_plan", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.TrainingResult", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("TrainingPlanId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("training_plan_id");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_training_result");
 
-                    b.HasIndex("TrainingPlanId");
+                    b.HasIndex("TrainingPlanId")
+                        .HasDatabaseName("ix_training_result_training_plan_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_training_result_user_id");
 
-                    b.ToTable("TrainingResult");
+                    b.ToTable("training_result", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("Email");
+                        .HasColumnName("email");
 
                     b.Property<string>("HashedPassword")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("HashedPassword");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("hashed_password");
 
                     b.Property<string>("Nickname")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("Nickname");
+                        .HasColumnName("nickname");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_users");
 
-                    b.ToTable("User");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("LgymApp.Domain.Entities.BodyPartMeasurement", b =>
@@ -273,7 +337,8 @@ namespace LgymApp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_body_part_measurement_user_user_id");
 
                     b.Navigation("User");
                 });
@@ -282,7 +347,8 @@ namespace LgymApp.DataAccess.Migrations
                 {
                     b.HasOne("LgymApp.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_exercise_user_user_id");
 
                     b.Navigation("User");
                 });
@@ -293,19 +359,22 @@ namespace LgymApp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_exercise_score_exercise_exercise_id");
 
                     b.HasOne("LgymApp.Domain.Entities.TrainingResult", "Training")
                         .WithMany("ExercisesScores")
                         .HasForeignKey("TrainingId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_exercise_score_training_result_training_id");
 
                     b.HasOne("LgymApp.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_exercise_score_user_user_id");
 
                     b.Navigation("Exercise");
 
@@ -320,13 +389,15 @@ namespace LgymApp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_main_record_exercise_exercise_id");
 
                     b.HasOne("LgymApp.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_main_record_user_user_id");
 
                     b.Navigation("Exercise");
 
@@ -339,7 +410,8 @@ namespace LgymApp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_plan_user_user_id");
 
                     b.Navigation("User");
                 });
@@ -350,11 +422,13 @@ namespace LgymApp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_recommended_number_of_reps_exercise_exercise_id");
 
                     b.HasOne("LgymApp.Domain.Entities.TrainingPlan", null)
                         .WithMany("RecommendedNumberOfReps")
-                        .HasForeignKey("TrainingPlanId");
+                        .HasForeignKey("TrainingPlanId")
+                        .HasConstraintName("fk_recommended_number_of_reps_training_plan_training_plan_id");
 
                     b.Navigation("Exercise");
                 });
@@ -365,7 +439,8 @@ namespace LgymApp.DataAccess.Migrations
                         .WithMany("TrainingsDaysPlans")
                         .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_training_plan_plan_plan_id");
 
                     b.Navigation("Plan");
                 });
@@ -376,13 +451,15 @@ namespace LgymApp.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("TrainingPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_training_result_training_plan_training_plan_id");
 
                     b.HasOne("LgymApp.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_training_result_user_user_id");
 
                     b.Navigation("TrainingPlan");
 

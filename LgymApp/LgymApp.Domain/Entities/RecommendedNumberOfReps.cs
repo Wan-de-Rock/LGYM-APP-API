@@ -6,25 +6,29 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents the recommended number of repetitions for an exercise.
 /// </summary>
-public class RecommendedNumberOfReps : BaseEntity
+public class RecommendedNumberOfReps : BaseEntity<RecommendedNumberOfReps>
 {
+    public new const string TableName = "recommended_number_of_reps";
+    
     /// <summary>
     /// Gets the number of series.
     /// </summary>
-    [Required]
     public int Series { get; private set; }
 
     /// <summary>
     /// Gets the number of repeats.
     /// </summary>
-    [Required, StringLength(50)]
     public string Repeats { get; private set; } // TODO: change to min, max integers
 
     /// <summary>
     /// Gets the associated exercise.
     /// </summary>
-    [Required]
     public Exercise Exercise { get; private set; }
+
+    /// <summary>
+    /// The unique identifier of the exercise associated with the recommended number of repetitions.
+    /// </summary>
+    public Guid ExerciseId { get; private set; }
 
     private RecommendedNumberOfReps() { }
 

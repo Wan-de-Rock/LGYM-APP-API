@@ -6,24 +6,25 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a plan for a training day entity
 /// </summary>
-public class TrainingPlan : BaseEntity
+public class TrainingPlan : BaseEntity<TrainingPlan>
 {
+    public new const string TableName = "training_plans";
+    
     /// <summary>
     /// The name of the plan day.
     /// </summary>
-    [Required, StringLength(50)]
     public string Name { get; private set; }
 
     /// <summary>
     /// The plan associated with the plan day.
     /// </summary>
-    [Required]
     public Plan Plan { get; private set; }
+
+    public Guid PlanId { get; private set; }
 
     /// <summary>
     /// The recommended number of reps for the plan day.
     /// </summary>
-    [Required]
     public ISet<RecommendedNumberOfReps> RecommendedNumberOfReps { get; private set; }
         = new HashSet<RecommendedNumberOfReps>();
 

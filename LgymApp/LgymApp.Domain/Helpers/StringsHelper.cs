@@ -6,18 +6,6 @@ namespace LgymApp.Domain.Helpers;
 public static class StringsHelper
 {
     /// <summary>
-    /// Converts a given string to underscore case.
-    /// </summary>
-    /// <param name="str">The input string.</param>
-    /// <returns>The string converted to underscore case.</returns>
-    public static string ToUnderscoreCase(this string str) =>
-        string.Concat(
-            str.Select((x, i) =>
-                i > 0 && char.IsUpper(x) && (char.IsLower(str[i - 1]) || i < str.Length - 1 && char.IsLower(str[i + 1]))
-                    ? "_" + x
-                    : x.ToString())).ToLowerInvariant();
-
-    /// <summary>
     /// Converts a given string to snake case.
     /// </summary>
     /// <param name="name">The input string.</param>
@@ -74,25 +62,6 @@ public static class StringsHelper
 
             builder.Append(currentChar);
             previousCategory = currentCategory;
-        }
-
-        return builder.ToString();
-    }
-
-    public static string ToSnakeCase2(string name)
-    {
-        if (string.IsNullOrEmpty(name))
-            return name;
-
-        var builder = new System.Text.StringBuilder();
-        for (int i = 0; i < name.Length; i++)
-        {
-            if (char.IsUpper(name[i]) && i > 0)
-            {
-                builder.Append('_');
-            }
-
-            builder.Append(char.ToLower(name[i]));
         }
 
         return builder.ToString();

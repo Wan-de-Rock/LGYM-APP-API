@@ -21,7 +21,10 @@ builder.Services.AddSingleton<SoftDeletesInterceptor>();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options
-        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+        .UseNpgsql(
+            builder.Configuration.GetConnectionString("DefaultConnection"), // TODO: add db settings to DI and move configuration to context
+            x => x.MigrationsHistoryTable("__ef_migrations_history", "public")
+            );
 });
 
 //builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
@@ -31,7 +34,7 @@ builder.Services.AddEndpoints();
 
 #region Auth
 
-var authOptions = builder.Configuration.GetSection(nameof(AuthOptions)).Get<AuthOptions>();
+var authOptions = builder.Configuration.GetRequiredSection(nameof(AuthOptions)).Get<AuthOptions>()!;
 
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.Secret));
 
@@ -60,7 +63,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-var routeGroupBuilder = app.MapGroup("api");
+var routeGroupBuilder = app.MapGroup("lgym-app/api");
 app.UseEndpoints(routeGroupBuilder);
 
 // Configure the HTTP request pipeline.
@@ -71,6 +74,10 @@ if (app.Environment.IsDevelopment())
     {
         opt.SwaggerEndpoint("/swagger/v1/swagger.json", "LgymApp.Api v1");
     });
+    
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();
 }
 app.UseHttpsRedirection();
 

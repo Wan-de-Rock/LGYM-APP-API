@@ -1,5 +1,4 @@
-﻿using LgymApp.Domain.Helpers;
-using LgymApp.Domain.Interfaces;
+﻿using LgymApp.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -17,7 +16,8 @@ public class SoftDeletesInterceptor : SaveChangesInterceptor
         return base.SavingChanges(eventData, result);
     }
 
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
+        InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         var context = eventData.Context;
         if (context == null) return base.SavingChangesAsync(eventData, result, cancellationToken);
@@ -26,18 +26,20 @@ public class SoftDeletesInterceptor : SaveChangesInterceptor
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
-    
+
     private void HandleSoftDeletes(DbContext context)
     {
-        var entries = context.ChangeTracker.Entries<ISoftDeletable>();
+        var entries =
+                context
+                    .ChangeTracker
+                    .Entries<ISoftDeletable>()
+                    .Where(e => e.State == EntityState.Deleted)
+            ;
 
         foreach (var entry in entries)
         {
-            if (entry.State == EntityState.Deleted)
-            {
-                entry.State = EntityState.Modified;
-                entry.Property(nameof(ISoftDeletable.DeletedAt)).CurrentValue = DateTime.UtcNow;
-            }
+            entry.State = EntityState.Modified;
+            entry.Property(nameof(ISoftDeletable.DeletedAt)).CurrentValue = DateTime.UtcNow;
         }
     }
 }

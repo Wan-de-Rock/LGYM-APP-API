@@ -7,36 +7,44 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// The best result of the exercise.
 /// </summary>
-public class MainRecord : BaseEntity
+public class MainRecord : BaseEntity<MainRecord>
 {
+    public new const string TableName = "main_records";
+    
     /// <summary>
     /// User associated with the main record.
     /// </summary>
-    [Required]
     public User User { get; private set; }
+
+    /// <summary>
+    /// The unique identifier of the user associated with the main record.
+    /// </summary>
+    public Guid UserId { get; private set; }
 
     /// <summary>
     /// Exercise associated with the main record.
     /// </summary>
-    [Required]
     public Exercise Exercise { get; private set; }
+    
+    /// <summary>
+    /// The unique identifier of the exercise associated with the main record.
+    /// </summary>
+    public Guid ExerciseId { get; private set; }
 
     /// <summary>
     /// Weight unit of the main record.
     /// </summary>
-    [Required, EnumDataType(typeof(WeightDataUnitsEnum))]
+    [EnumDataType(typeof(WeightDataUnitsEnum))]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
     /// <summary>
     /// Weight of the main record.
     /// </summary>
-    [Required]
     public double Weight { get; private set; }
 
     /// <summary>
     /// Date of the main record.
     /// </summary>
-    [Required]
     public DateTime Date { get; private set; }
 
     private MainRecord() { }

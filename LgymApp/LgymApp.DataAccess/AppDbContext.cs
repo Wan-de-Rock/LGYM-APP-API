@@ -1,24 +1,27 @@
 ﻿using LgymApp.DataAccess.Converters;
 using LgymApp.DataAccess.Interceptors;
 using LgymApp.Domain.Attributes;
+using LgymApp.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LgymApp.DataAccess;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options, SoftDeletesInterceptor softDeletesInterceptor) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options, SoftDeletesInterceptor softDeletesInterceptor)
+    : DbContext(options)
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
-            .AddInterceptors(softDeletesInterceptor);
+            .AddInterceptors(softDeletesInterceptor)
+            .UseSnakeCaseNamingConvention();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-        
+
         AddDateTimeTruncateConverter(modelBuilder);
     }
-    
+
     private void AddDateTimeTruncateConverter(ModelBuilder modelBuilder)
     {
         NullableUtcDateTimeTruncateConverter dateTimeConverter = null!;
@@ -43,11 +46,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, SoftDeletesInt
                 property.SetValueConverter(dateTimeConverter);
             }
         }
-    }
-    
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-    {
-        base.ConfigureConventions(configurationBuilder);
-        //configurationBuilder.Conventions.Add(new SnakeCaseConventionPlugin());
     }
 }

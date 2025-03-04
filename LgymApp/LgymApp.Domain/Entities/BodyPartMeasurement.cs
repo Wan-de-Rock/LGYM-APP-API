@@ -7,30 +7,33 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Measurement of body part
 /// </summary>
-public class BodyPartMeasurement : BaseEntity
+public class BodyPartMeasurement : BaseEntity<BodyPartMeasurement>
 {
+    public new const string TableName = "body_part_measurements";
+    
     /// <summary>
     /// The user associated with the body part measurement.
     /// </summary>
-    [Required]
     public User User { get; private set; }
+
+    /// <summary>
+    /// The unique identifier of the user associated with the body part measurement.
+    /// </summary>
+    public Guid UserId { get; private set; }
 
     /// <summary>
     /// The body part being measured.
     /// </summary>
-    [Required]
     public BodyPartsEnum BodyPart { get; private set; }
 
     /// <summary>
     /// The weight unit of the measurement.
     /// </summary>
-    [Required]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
     /// <summary>
     /// The weight value of the measurement.
     /// </summary>
-    [Required]
     public double Weight { get; private set; }
 
     private BodyPartMeasurement() { }

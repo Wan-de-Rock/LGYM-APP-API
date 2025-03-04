@@ -6,19 +6,24 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Container for the training plan days.
 /// </summary>
-public class Plan : BaseEntity
+public class Plan : BaseEntity<Plan>
 {
+    public new const string TableName = "plans";
+    
     /// <summary>
     /// The name of the plan.
     /// </summary>
-    [Required, StringLength(50)]
     public string Name { get; private set; }
 
     /// <summary>
     /// The user associated with the plan.
     /// </summary>
-    [Required]
     public User User { get; private set; }
+
+    /// <summary>
+    /// The unique identifier of the user associated with the plan.
+    /// </summary>
+    public Guid UserId { get; private set; }
 
     /// <summary>
     /// The set of plan days.
@@ -28,7 +33,6 @@ public class Plan : BaseEntity
     /// <summary>
     /// The number of training days in the plan.
     /// </summary>
-    [Required]
     public int NumberOfTrainingDays { get; private set; } // TODO: remove
 
     private Plan() { }

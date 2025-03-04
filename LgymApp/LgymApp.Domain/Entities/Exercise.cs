@@ -8,18 +8,18 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents an exercise entity.
 /// </summary>
-public class Exercise : BaseEntity, ISoftDeletable
+public class Exercise : BaseEntity<Exercise>, ISoftDeletable
 {
+    public new const string TableName = "exercises";
+    
     /// <summary>
     /// Name of the exercise.
     /// </summary>
-    [Required, StringLength(50)]
     public string Name { get; private set; }
 
     /// <summary>
     /// Body part targeted by the exercise.
     /// </summary>
-    [EnumDataType(typeof(BodyPartsEnum))]
     public BodyPartsEnum BodyPart { get; private set; }
 
     /// <summary>
@@ -32,7 +32,6 @@ public class Exercise : BaseEntity, ISoftDeletable
     /// <summary>
     /// Description of the exercise.
     /// </summary>
-    [StringLength(1000)]
     public string? Description { get; private set; }
     
     public DateTime? DeletedAt { get; private set; } 

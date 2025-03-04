@@ -7,48 +7,59 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents an exercise score entity.
 /// </summary>
-public class ExerciseScore : BaseEntity
+public class ExerciseScore : BaseEntity<ExerciseScore>
 {
+    public new const string TableName = "exercise_scores";
+    
     /// <summary>
     /// Exercise associated with the score.
     /// </summary>
-    [Required]
     public Exercise Exercise { get; private set; }
+
+    /// <summary>
+    /// The unique identifier of the exercise associated with the score.
+    /// </summary>
+    public Guid ExerciseId { get; private set; }
 
     /// <summary>
     /// User associated with the score.
     /// </summary>
-    [Required]
     public User User { get; private set; }
 
     /// <summary>
+    /// The unique identifier of the user associated with the score.
+    /// </summary>
+    public Guid UserId { get; private set; }
+    
+    /// <summary>
     /// Training associated with the score.
     /// </summary>
-    [Required]
-    public TrainingResult Training { get; private set; }
+    public TrainingResult TrainingResult { get; private set; }
+    
+    /// <summary>
+    /// The unique identifier of the training result associated with the score.
+    /// </summary>
+    public Guid TrainingResultId { get; private set; }
 
     /// <summary>
     /// Number of repeats in current series.
     /// </summary>
-    [Required] // TODO change to int and implement enum for partial repeats
-    public double Repeats { get; private set; }
+    public double Repeats { get; private set; }// TODO change to int and implement enum for partial repeats
 
     /// <summary>
     /// Series number.
     /// </summary>
-    [Required]
     public int Series { get; private set; }
 
     /// <summary>
     /// Weight for the exercise score.
     /// </summary>
-    [Required]
     public double Weight { get; private set; }
 
     /// <summary>
     /// Weight unit for the exercise score.
     /// </summary>
-    [Required, EnumDataType(typeof(WeightDataUnitsEnum))]
+    [EnumDataType(typeof(WeightDataUnitsEnum))]
     public WeightDataUnitsEnum WeightUnit { get; private set; }
 
     private ExerciseScore() { }
@@ -77,7 +88,7 @@ public class ExerciseScore : BaseEntity
         => User = user ?? throw new ArgumentNullException(nameof(user));
 
     public void SetTraining(TrainingResult? training) 
-        => Training = training ?? throw new ArgumentNullException(nameof(training));
+        => TrainingResult = training ?? throw new ArgumentNullException(nameof(training));
 
     public void SetRepeats(double repeats) 
         => Repeats = repeats >= 0 ? repeats : throw new ArgumentOutOfRangeException(nameof(repeats));
