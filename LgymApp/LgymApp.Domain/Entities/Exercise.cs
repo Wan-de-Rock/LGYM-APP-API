@@ -1,24 +1,25 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using LgymApp.Domain.Interfaces;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Represents an exercise entity.
 /// </summary>
-public class Exercise : AuditableEntity
+public class Exercise : BaseEntity<Exercise>, ISoftDeletable
 {
+    public new const string TableName = "exercises";
+    
     /// <summary>
     /// Name of the exercise.
     /// </summary>
-    [Required]
     public string Name { get; private set; }
 
     /// <summary>
     /// Body part targeted by the exercise.
     /// </summary>
-    [EnumDataType(typeof(BodyPartsEnum))]
     public BodyPartsEnum BodyPart { get; private set; }
 
     /// <summary>
@@ -32,12 +33,16 @@ public class Exercise : AuditableEntity
     /// Description of the exercise.
     /// </summary>
     public string? Description { get; private set; }
+    
+    public DateTime? DeletedAt { get; private set; } 
 
     //public string? ImageUrl { get; set; }
     //public string? VideoUrl { get; set; }
     //public string? Equipment { get; set; }
     //public string? Difficulty { get; set; }
     //public string? ExerciseType { get; set; }
+
+    private Exercise() { }
 
     public Exercise(string name, BodyPartsEnum bodyPart, string description) => Update(name, bodyPart, description);
 

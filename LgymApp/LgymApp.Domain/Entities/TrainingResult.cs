@@ -6,24 +6,36 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a training result entity.
 /// </summary>
-public class TrainingResult : AuditableEntity
+public class TrainingResult : BaseEntity<TrainingResult>
 {
+    public new const string TableName = "training_results";
+    
     /// <summary>
     /// The user associated with the training result.
     /// </summary>
-    [Required]
     public User User { get; private set; }
+
+    /// <summary>
+    /// The unique identifier of the user associated with the training result.
+    /// </summary>
+    public Guid UserId { get; private set; }
 
     /// <summary>
     /// The training plan associated with the training result.
     /// </summary>
-    [Required]
     public TrainingPlan TrainingPlan { get; private set; }
+    
+    /// <summary>
+    /// The unique identifier of the training plan associated with the training result.
+    /// </summary>
+    public Guid TrainingPlanId { get; private set; }
 
     /// <summary>
     /// The collection of exercise scores associated with the training result.
     /// </summary>
     public ISet<ExerciseScore> ExercisesScores { get; private set; } = new HashSet<ExerciseScore>();
+
+    private TrainingResult() { }
 
     public TrainingResult(User? user, TrainingPlan? trainingPlan)
     {

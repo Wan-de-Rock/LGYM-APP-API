@@ -2,15 +2,19 @@
 
 public static class ReflectionHelper
 {
-    /// <summary>
-    /// Retrieves all types from the current application domain that are assignable from the specified type <typeparamref name="T"/>.
-    /// </summary>
-    /// <typeparam name="T">The base type or interface to check against.</typeparam>
-    /// <returns>An enumerable collection of types that are assignable from the specified type <typeparamref name="T"/>.</returns>
-    public static IEnumerable<Type> GetTypesAssignableFromType<T>()
+    public const string PROJECT_NAME_PREFIX = "LgymApp";
+    public static IEnumerable<Type> GetAllSolutionTypes()
     {
         return AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => typeof(T).IsAssignableFrom(type));
+                .Where(assembly => assembly.FullName?.StartsWith(PROJECT_NAME_PREFIX) == true)
+                .SelectMany(assembly => assembly.GetTypes())
+            ;
+    }
+
+    public static IEnumerable<Type> GetAllTypesImplementingInterface<T>()
+    {
+        return GetAllSolutionTypes()
+                .Where(type => typeof(T).IsAssignableFrom(type) && type is { IsClass: true, IsAbstract: false })
+            ;
     }
 }

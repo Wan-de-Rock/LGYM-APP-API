@@ -1,21 +1,70 @@
-using LgymApp.Api.Data;
+using System.Text;
+using LgymApp.Api.Extensions;
+using LgymApp.Api.Middlewares;
+using LgymApp.Application.Options;
+using LgymApp.DataAccess;
+using LgymApp.DataAccess.Interceptors;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
+
+builder.Services.AddSingleton<SoftDeletesInterceptor>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options
+        .UseNpgsql(
+            builder.Configuration.GetConnectionString("DefaultConnection"), // TODO: add db settings to DI and move configuration to context
+            x => x.MigrationsHistoryTable("__ef_migrations_history", "public")
+            );
 });
 
+//builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
+
+builder.Services.AddServices();
+builder.Services.AddEndpoints();
+
+#region Auth
+
+var authOptions = builder.Configuration.GetRequiredSection(nameof(AuthOptions)).Get<AuthOptions>()!;
+
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.Secret));
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = authOptions.Issuer,
+            ValidateAudience = true,
+            ValidAudience = authOptions.Audience,
+            ValidateLifetime = true,
+            IssuerSigningKey = key,
+            ValidateIssuerSigningKey = true
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+#endregion
+
 var app = builder.Build();
+
+var routeGroupBuilder = app.MapGroup("lgym-app/api");
+app.UseEndpoints(routeGroupBuilder);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -25,12 +74,19 @@ if (app.Environment.IsDevelopment())
     {
         opt.SwaggerEndpoint("/swagger/v1/swagger.json", "LgymApp.Api v1");
     });
+    
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();
 }
-
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseMiddleware<GlobalTransactionHandlerMiddleware>();
+//app.UseMiddleware<GlobalExceptionHandlerMiddleware>(); // TODO: can be customized
+app.UseExceptionHandler();
 
 app.Run();
+

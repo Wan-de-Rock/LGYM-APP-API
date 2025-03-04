@@ -12,11 +12,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LgymApp.Domain\LgymApp.Domain.csproj" />
+    <ProjectReference Include="..\LgymApp.Application\LgymApp.Application.csproj" />
+    <ProjectReference Include="..\LgymApp.DataAccess\LgymApp.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

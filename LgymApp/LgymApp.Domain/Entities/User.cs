@@ -1,99 +1,92 @@
 ﻿using LgymApp.Domain.Common;
-using LgymApp.Domain.Enums;
-using LgymApp.Domain.Helpers;
 using System.ComponentModel.DataAnnotations;
+using LgymApp.Domain.Interfaces;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Represents a user entity with properties and methods for managing user information.
 /// </summary>
-public class User : BaseEntity
+public class User : BaseEntity<User>, ISoftDeletable
 {
+    public new static string TableName => "users";
+
     /// <summary>
     /// The nickname of the user.
     /// </summary>
-    [Required]
-    public string NickName { get; private set; }
+    public string Nickname { get; private set; }
 
     /// <summary>
     /// The email address of the user.
     /// </summary>
-    [EmailAddress, Required]
-    public string Email { get; private set; } // TODO: validate
-    //public string HashedPassword { get; set; }
+    public string Email { get; private set; } 
+    
+    /// <summary>
+    /// The hashed password of the user.
+    /// </summary>
+    public string HashedPassword { get; private set; }
     //public string ProfilePicture { get; set; } 
-
-    /// <summary>
-    /// The role of the user.
-    /// </summary>
-    [Required]
-    public UserRolesEnum Role { get; private set; } = UserRolesEnum.Normal;
-
-    /// <summary>
-    /// The plan associated with the user.
-    /// </summary>
-    public Plan? Plan { get; private set; }
+    
+    public DateTime? DeletedAt { get; private set; }
 
     /// <summary>
     /// The rank of the user based on their Elo score.
     /// </summary>
-    public RanksEnum Rank => EloHelper.GetRank(Elo);
+    //public RanksEnum Rank => EloHelper.GetRank(Elo);
 
     /// <summary>
     /// The Elo score of the user.
     /// </summary>
-    public int Elo { get; private set; } = EloHelper.EloRanks[RanksEnum.Junior_1].max; // TODO: Elo must be calculated based on the user's performance
+    //public int Elo { get; private set; } = EloHelper.EloRanks[RanksEnum.Junior_1].max; // TODO: Elo must be calculated based on the user's performance
 
     /// <summary>
     /// Initializes a new instance of the <see cref="User"/> class with the specified details.
     /// </summary>
-    /// <param name="nickName">The nickname of the user.</param>
+    /// <param name="nickname">The nickname of the user.</param>
     /// <param name="email">The email address of the user.</param>
-    /// <param name="userRole">The role of the user.</param>
-    /// <param name="plan">The plan associated with the user.</param>
-    /// <param name="elo">The Elo score of the user.</param>
+    /// <param name="hashedPassword">The hashed password of the user.</param>
     public User(
-        string? nickName,
+        string? nickname,
         string? email,
-        UserRolesEnum userRole,
-        Plan? plan,
-        int elo
+        string hashedPassword
         )
     {
-        Update(nickName, email, userRole, plan, elo);
+        Update(nickname, email, hashedPassword);
     }
 
     /// <summary>
     /// Updates the user details with the specified information.
     /// </summary>
-    /// <param name="nickName">The nickname of the user.</param>
+    /// <param name="nickname">The nickname of the user.</param>
     /// <param name="email">The email address of the user.</param>
-    /// <param name="userRole">The role of the user.</param>
-    /// <param name="plan">The plan associated with the user.</param>
-    /// <param name="elo">The Elo score of the user.</param>
+    /// <param name="hashedPassword">The hashed password of the user.</param>
     public void Update(
-        string? nickName,
+        string? nickname,
         string? email,
-        UserRolesEnum userRole,
-        Plan? plan,
-        int elo)
+        string hashedPassword)
     {
-        SetNickName(nickName);
+        SetNickname(nickname);
         SetEmail(email);
-        SetUserRole(userRole);
-        SetPlan(plan);
-        SetElo(elo);
+        SetHashedPassword(hashedPassword);
     }
 
     /// <summary>
     /// Sets the nickname of the user.
     /// </summary>
-    /// <param name="nickName">The nickname of the user.</param>
+    /// <param name="nickname">The nickname of the user.</param>
     /// <exception cref="ArgumentNullException">Thrown when the nickname is null or empty.</exception>
-    public void SetNickName(string? nickName)
-        => NickName = !string.IsNullOrEmpty(nickName)
-        ? nickName : throw new ArgumentNullException(nameof(nickName));
+    public void SetNickname(string? nickname)
+        => Nickname = !string.IsNullOrEmpty(nickname)
+        ? nickname : throw new ArgumentNullException(nameof(nickname));
+    
+    /// <summary>
+    /// Sets the hashed password of the user.
+    /// </summary>
+    /// <param name="hashedPassword">The hashed password of the user.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the hashed password is null or empty.</exception>
+    public void SetHashedPassword(string hashedPassword)
+        => HashedPassword = !string.IsNullOrEmpty(hashedPassword)
+            ? hashedPassword : throw new ArgumentNullException(nameof(hashedPassword));
 
     /// <summary>
     /// Sets the email address of the user.
@@ -103,26 +96,4 @@ public class User : BaseEntity
     public void SetEmail(string? email)
         => Email = !string.IsNullOrEmpty(email)
         ? email : throw new ArgumentNullException(nameof(email));
-
-    /// <summary>
-    /// Sets the role of the user.
-    /// </summary>
-    /// <param name="role">The role of the user.</param>
-    public void SetUserRole(UserRolesEnum role) => Role = role;
-
-    /// <summary>
-    /// Sets the plan associated with the user.
-    /// </summary>
-    /// <param name="plan">The plan associated with the user.</param>
-    public void SetPlan(Plan? plan) => Plan = plan;
-
-    /// <summary>
-    /// Sets the Elo score of the user.
-    /// </summary>
-    /// <param name="elo">The Elo score of the user.</param>
-    /// <returns>The updated Elo score.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown when the Elo score is less than 0.</exception>
-    public int SetElo(int elo)
-        => Elo = elo >= 0
-        ? elo : throw new ArgumentOutOfRangeException(nameof(elo));
 }
