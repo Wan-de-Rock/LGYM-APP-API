@@ -1,15 +1,14 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Measurement of body part
 /// </summary>
-public class BodyPartMeasurement : BaseEntity<BodyPartMeasurement>
+public class BodyPartMeasurement : BaseEntity
 {
-    public new const string TableName = "body_part_measurements";
+    public const string TableName = "body_part_measurements";
     
     /// <summary>
     /// The user associated with the body part measurement.

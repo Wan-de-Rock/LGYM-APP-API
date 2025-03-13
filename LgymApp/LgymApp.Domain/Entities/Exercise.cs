@@ -1,6 +1,5 @@
 ﻿using LgymApp.Domain.Common;
 using LgymApp.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
 using LgymApp.Domain.Interfaces;
 
 namespace LgymApp.Domain.Entities;
@@ -8,9 +7,9 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents an exercise entity.
 /// </summary>
-public class Exercise : BaseEntity<Exercise>, ISoftDeletable
+public class Exercise : BaseEntity, ISoftDeletable
 {
-    public new const string TableName = "exercises";
+    public const string TableName = "exercises";
     
     /// <summary>
     /// Name of the exercise.

@@ -1,5 +1,4 @@
 ﻿using LgymApp.Domain.Common;
-using System.ComponentModel.DataAnnotations;
 using LgymApp.Domain.Interfaces;
 
 namespace LgymApp.Domain.Entities;
@@ -7,9 +6,9 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents a user entity with properties and methods for managing user information.
 /// </summary>
-public class User : BaseEntity<User>, ISoftDeletable
+public class User : BaseEntity, ISoftDeletable
 {
-    public new static string TableName => "users";
+    public static string TableName => "users";
 
     /// <summary>
     /// The nickname of the user.

@@ -1,14 +1,13 @@
 ﻿using LgymApp.Domain.Common;
-using System.ComponentModel.DataAnnotations;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Represents the recommended number of repetitions for an exercise.
 /// </summary>
-public class RecommendedNumberOfReps : BaseEntity<RecommendedNumberOfReps>
+public class RecommendedNumberOfReps : BaseEntity
 {
-    public new const string TableName = "recommended_number_of_reps";
+    public const string TableName = "recommended_number_of_reps";
     
     /// <summary>
     /// Gets the number of series.

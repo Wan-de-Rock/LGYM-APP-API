@@ -7,9 +7,9 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// The best result of the exercise.
 /// </summary>
-public class MainRecord : BaseEntity<MainRecord>
+public class MainRecord : BaseEntity
 {
-    public new const string TableName = "main_records";
+    public const string TableName = "main_records";
     
     /// <summary>
     /// User associated with the main record.

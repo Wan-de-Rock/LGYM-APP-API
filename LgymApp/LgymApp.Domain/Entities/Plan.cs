@@ -1,14 +1,13 @@
 ﻿using LgymApp.Domain.Common;
-using System.ComponentModel.DataAnnotations;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Container for the training plan days.
 /// </summary>
-public class Plan : BaseEntity<Plan>
+public class Plan : BaseEntity
 {
-    public new const string TableName = "plans";
+    public const string TableName = "plans";
     
     /// <summary>
     /// The name of the plan.

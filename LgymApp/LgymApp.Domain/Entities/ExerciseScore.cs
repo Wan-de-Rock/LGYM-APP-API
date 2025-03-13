@@ -7,9 +7,9 @@ namespace LgymApp.Domain.Entities;
 /// <summary>
 /// Represents an exercise score entity.
 /// </summary>
-public class ExerciseScore : BaseEntity<ExerciseScore>
+public class ExerciseScore : BaseEntity
 {
-    public new const string TableName = "exercise_scores";
+    public const string TableName = "exercise_scores";
     
     /// <summary>
     /// Exercise associated with the score.

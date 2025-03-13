@@ -1,14 +1,13 @@
 ﻿using LgymApp.Domain.Common;
-using System.ComponentModel.DataAnnotations;
 
 namespace LgymApp.Domain.Entities;
 
 /// <summary>
 /// Represents a training result entity.
 /// </summary>
-public class TrainingResult : BaseEntity<TrainingResult>
+public class TrainingResult : BaseEntity
 {
-    public new const string TableName = "training_results";
+    public const string TableName = "training_results";
     
     /// <summary>
     /// The user associated with the training result.

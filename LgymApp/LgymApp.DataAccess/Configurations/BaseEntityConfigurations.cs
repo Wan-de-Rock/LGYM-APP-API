@@ -1,5 +1,6 @@
 ﻿using LgymApp.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using LgymApp.DataAccess.ValueGenerators;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LgymApp.DataAccess.Configurations;
@@ -13,8 +14,9 @@ public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> w
         builder
             .Property(e => e.Id)
             .HasColumnOrder(1)
-            .ValueGeneratedNever();
-        
+            .ValueGeneratedOnAdd()
+            .HasValueGenerator<UUIDv7Generator>();
+
         if (typeof(ISoftDeletable).IsAssignableFrom(typeof(T)))
         {
             builder
