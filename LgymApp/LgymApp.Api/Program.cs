@@ -89,4 +89,3 @@ app.UseMiddleware<GlobalTransactionHandlerMiddleware>();
 app.UseExceptionHandler();
 
 app.Run();
-
