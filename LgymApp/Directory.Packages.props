@@ -1,23 +1,22 @@
 <Project>
     <ItemGroup>
-        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="[9.0.2]" VersionOverride="false"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="[9.0.3]" VersionOverride="false"/>
         <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[9.0.4]" VersionOverride="false"/>
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[9.0.2]" VersionOverride="false"/>
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="[9.0.2]" VersionOverride="false">
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[9.0.3]" VersionOverride="false"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="[9.0.3]" VersionOverride="false">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageVersion>
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="[9.0.2]" VersionOverride="false">
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="[9.0.3]" VersionOverride="false">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageVersion>
 
-        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="[9.0.2]" VersionOverride="false"/>
-        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[9.0.2]" VersionOverride="false"/>
+        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="[9.0.3]" VersionOverride="false"/>
+        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[9.0.3]" VersionOverride="false"/>
         <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="[9.0.0]" VersionOverride="false"/>
 
         <PackageVersion Include="EFCore.NamingConventions" Version="[9.0.0]" VersionOverride="false"/>
         <PackageVersion Include="Swashbuckle.AspNetCore" Version="[7.3.1]" VersionOverride="false"/>
-        <PackageVersion Include="System.Text.Json" Version="[9.0.2]" VersionOverride="false"/>
     </ItemGroup>
 </Project>
